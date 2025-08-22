@@ -1,0 +1,225 @@
+/* Gruvbox Dark Medium Theme for Remark.js Slides */
+:root {
+  --bg0: #282828;
+  --bg1: #3c3836;
+  --bg2: #504945;
+  --bg3: #665c54;
+  --bg4: #7c6f64;
+  --fg0: #fbf1c7;
+  --fg1: #ebdbb2;
+  --fg2: #d5c4a1;
+  --fg3: #bdae93;
+  --fg4: #a89984;
+  --red: #fb4934;
+  --green: #b8bb26;
+  --yellow: #fabd2f;
+  --blue: #83a598;
+  --purple: #d3869b;
+  --aqua: #8ec07c;
+  --orange: #fe8019;
+}
+
+html {
+  background-color: var(--bg0) !important;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: 'Droid Serif', 'Georgia', serif;
+  background-color: var(--bg0) !important;
+  color: var(--fg1);
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.remark-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.remark-slide-content {
+  background-color: var(--bg0) !important;
+  color: var(--fg1) !important;
+  font-size: 24px;
+  line-height: 1.6;
+  padding: 0 5em 4em 5em;
+  border: none;
+  overflow-y: auto;
+  max-height: 100vh;
+  box-sizing: border-box;
+}
+
+.remark-slide-content h1 {
+  color: var(--yellow);
+  font-size: 2.5em;
+  font-weight: bold;
+  margin-bottom: 0.5em;
+  border-bottom: 3px solid var(--orange);
+  padding-bottom: 0.2em;
+}
+
+.remark-slide-content h2 {
+  color: var(--blue);
+  font-size: 1.8em;
+  font-weight: bold;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+.remark-slide-content h3 {
+  color: var(--green);
+  font-size: 1.4em;
+  font-weight: bold;
+  margin-top: 0.8em;
+  margin-bottom: 0.4em;
+}
+
+.remark-slide-content p {
+  margin-bottom: 1em;
+  color: var(--fg1);
+}
+
+.remark-slide-content ul, .remark-slide-content ol {
+  margin-left: 1.5em;
+  margin-bottom: 1em;
+}
+
+.remark-slide-content li {
+  margin-bottom: 0.5em;
+  color: var(--fg1);
+}
+
+.remark-slide-content li::marker {
+  color: var(--orange);
+}
+
+.remark-slide-content strong {
+  color: var(--yellow);
+  font-weight: bold;
+}
+
+.remark-slide-content em {
+  color: var(--purple);
+  font-style: italic;
+}
+
+.remark-slide-content code {
+  background-color: var(--bg1);
+  color: var(--aqua);
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.9em;
+}
+
+.remark-slide-content pre {
+  background-color: var(--bg1);
+  border: 1px solid var(--bg3);
+  border-radius: 5px;
+  padding: 1em;
+  margin: 1em 0;
+  overflow: auto;
+  max-height: 60vh;
+  font-size: 0.8em;
+}
+
+.remark-slide-content pre code {
+  background-color: transparent;
+  color: var(--fg1);
+  padding: 0;
+  font-size: 0.8em;
+  line-height: 1.4;
+}
+
+.remark-slide-content blockquote {
+  border-left: 4px solid var(--orange);
+  padding-left: 1em;
+  margin: 1em 0;
+  background-color: var(--bg1);
+  padding: 1em;
+  border-radius: 0 5px 5px 0;
+}
+
+.remark-slide-content a {
+  color: var(--blue);
+  text-decoration: none;
+}
+
+.remark-slide-content a:hover {
+  color: var(--aqua);
+  text-decoration: underline;
+}
+
+.remark-slide-number {
+  color: var(--fg3) !important;
+  background-color: var(--bg1) !important;
+  padding: 0.3em 0.6em;
+  border-radius: 3px;
+  font-size: 0.8em;
+}
+
+.remark-slide-content .inverse {
+  background-color: var(--bg2);
+  color: var(--fg0);
+}
+
+.remark-slide-content .highlight {
+  background-color: var(--bg2);
+  color: var(--yellow);
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+}
+
+.remark-slide-content .left-column {
+  width: 45%;
+  float: left;
+}
+
+.remark-slide-content .right-column {
+  width: 45%;
+  float: right;
+}
+
+.remark-slide-content table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+}
+
+.remark-slide-content th, .remark-slide-content td {
+  border: 1px solid var(--bg3);
+  padding: 0.5em;
+  text-align: left;
+}
+
+.remark-slide-content th {
+  background-color: var(--bg2);
+  color: var(--yellow);
+  font-weight: bold;
+}
+
+.remark-slide-content td {
+  background-color: var(--bg1);
+}
+
+.remark-slide-content hr {
+  border: none;
+  border-top: 2px solid var(--bg3);
+  margin: 2em 0;
+}
+
+@media print {
+  .remark-slide-content {
+    background-color: white !important;
+    color: black !important;
+  }
+}

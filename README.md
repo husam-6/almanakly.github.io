@@ -1,4 +1,4 @@
-# Husam Almanakly – CS102 @ Cooper Union Course Information*
+# Husam Almanakly – CS102 @ Cooper Union Course Information
 
 ---
 ### Course Description
@@ -29,12 +29,12 @@ Assignments can be worked on in teams of 2-3, and they are actually encouraged! 
 ---
 
 ### Lessons
-- [Lesson 1: Intro, Unix, Git](./lessons/CS102%20Lesson%201%20-%20Intro,%20Unix,%20Git.md)  
-- [Lesson 2: Functions, Variables, Types, Operators](./lessons/CS102%20Lesson%202%20-%20Functions,%20Variables,%20Types,%20Operators.md)  
+- [Lesson 1: Intro, Unix, Git](./lessons/CS102%20Lesson%201%20-%20Intro,%20Unix,%20Git.html)  
+- [Lesson 2: Functions, Variables, Types, Operators](./lessons/CS102%20Lesson%202%20-%20Functions,%20Variables,%20Types,%20Operators.html)
 
 ---
 
 ### Assignments
-- Assignment 1 – [link or description]
-- Assignment 2 – [link or description]
+- Assignment 1
+- Assignment 2
 ---
