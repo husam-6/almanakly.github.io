@@ -1,5 +1,4 @@
-# Husam Almanakly – CS102 @ Cooper Union
-## *Course Information*
+# Husam Almanakly – CS102 @ Cooper Union Course Information*
 
 ---
 ### Course Description
@@ -38,5 +37,4 @@ Assignments can be worked on in teams of 2-3, and they are actually encouraged! 
 ### Assignments
 - Assignment 1 – [link or description]
 - Assignment 2 – [link or description]
-- Project – [link or description]
 ---
