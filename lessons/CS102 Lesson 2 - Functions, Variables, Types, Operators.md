@@ -1,0 +1,223 @@
+Last [lesson](obsidian://open?vault=Obsidian%20Vault&file=CS102%2FCS102%20Lesson%201%20-%20Intro%2C%20Unix%2C%20Git)we went over the class, Git, Unix, and other general intros. This lesson we begin to dive a bit into the C programming language. 
+
+This class is by no means going to teach you everything about C. C is a complicated language and you could study it for years before even approaching that point. But we'll try to get you to a state where you can write and understand useful programs
+
+## Functions
+### Main
+- Functions are a key part of programming in C. We discussed in last class how you can use it to define a set of instructions to execute
+- main is a special function in C - this is where your program begins executions 
+- Every program must have 1 main function somewhere
+### Libraries 
+- Libraries are collections of different programs written which you can utilize. In our hello world, we used `#include<stdio.h>`
+	- This tells the compiler to include header file (basically definitions and declarations) for stdio (standard input / output library in C)
+### Arguments 
+- You can communicate what to give to a function through *parameters* or *arguments*
+- function(int arg1, char arg2) -> stuff inside the paranthesis are what you pass to the function 
+- Statements must be between the curly braces 
+```
+#include<stdio.h>
+int main() {
+	printf("Hello World!\n");
+	return 0;
+}
+```
+- printf is a function we are calling, and we passed it the argument "Hello World!\n" 
+- This is a character string or string constant
+- \n is a newline character - this function will not put output on a newline by default!
+	- Newline is an example of an *escaped sequence* - that just means special characters representing hard-to-type / invisible characters
+	- \b is backspace
+	- \t is tab 
+	- \\" is for double quotes
+### Excercise 
+- Run our program with a few of these
+- Try \c
+- Show some examples with argument substitution
+## Variables
+- Functions are super useful to do a specific task. What do you use inside a function though? How do you accomplish a more complicated task?
+- You can have *local* and *global* variables. We will discuss the difference of these in a future lesson, for now just think about variables in the general sense
+- Think of a variable as a place you can dump data, which can often change unless specified
+		- In a *statically typed* language you need to define what kind of data you put (C, C++, Java)
+		- In a *dynamically typed* language, you don't have to (Python, Javascript)
+### Variable Name Restrictions
+- Names are made up of letters and digits
+	- Underscore counts as a letter!
+	- Don't begin variable names with underscore, however, since library routines often use such names
+- Case sensitive
+- Use lower case for variable names & all caps for constants
+- Cannot use reserved keywords
+### Variable Name Best Practices
+- This will sound nerdy, but the naming matters alot!
+- You should pick something which is related to what purposes the variable serves
+- It's a common principle in CS that you should be able to read some code without any comments (if its written in a descriptive fashion)
+```
+char a;
+int aa;
+short aaa; // these are bad!
+
+char firstInitial;
+int totalMilesTravelled;
+short currentFlightMiles;
+```
+- Constants should be all caps - these are variables which are not going to change
+	- its bad practice to have 'magic numbers' (random constants without any context)
+- You can also use `#define` to define a constant (this is called a macro)
+```
+#include <stdio.h>
+#define PI 3.14
+
+void main()
+{
+    int radius = 2;
+    float area = PI * radius * radius;
+    printf("%f", area);
+    return;
+}
+```
+## Converting Fahrenheit to Celsius
+Run this for a demo
+```
+#include <stdio.h>
+/* print Fahrenheit-Celsius table
+for fahr = 0, 20, ..., 300 */
+
+int main() {
+	// Declare variables
+	int fahr, celsius;
+	int lower, upper, step;
+
+	// ASSIGN
+	lower = 0; /* lower limit of temperature scale */
+	upper = 300; /* upper limit */
+	step = 20; /* step size */
+	fahr = lower;
+
+	// ITERATION - WE WILL DISCUSS THIS
+	while (fahr <= upper) {
+		celsius = 5 * (fahr-32) / 9;
+		printf("%d\t%d\n", fahr, celsius); // Note the functionality of printf!
+		fahr = fahr + step;
+	}
+}
+```
+- Taken from the textbook, this function will calculate Fahrenheit - Celsius conversions
+- Comments (either // or /\* \*/ for multi line) are how you can document your code. Super important! These get skipped by the compiler 
+## Types 
+- In C there are a few major types you should be familiar with 
+	- int - integers. This depends on your machine but often 32 bits (4 bytes)
+		- A bit is a 0 or a 1. You will learn how to read Binary in other classes, for now we won't get into the details. 
+		- `-2^31 to 2^31^` range if signed
+		- `0 to 2^32^ -1` if unsigned
+	- float - floating point decimal. This is how you can represent decimals, often 32bit
+	- char - character, 1 byte (or 8 bits). 
+	- short - short integer (2 bytes)
+	- long - long integer (8 bytes)
+	- double - double precision floating point (8 bytes)
+- There are also arrays, structs, unions, and enums which we will get to later 
+- And POINTERS!
+### In code:
+```
+char a; // a single byte
+int i; // an integer; max is based on machine
+float f; // single-precision floating point number
+double d; // double-precision floating point number
+short int si; // decreases the size of an int; int can be omitted
+long int li; // increase the size of an int; int can be omitted
+```
+### Limits
+```
+#include <stdio.h>
+#include <limits.h>
+
+int main()
+{
+    printf("CHAR_MIN: %d\n", CHAR_MIN);
+    printf("CHAR_MAX: %d\n", CHAR_MAX);
+    printf("SHRT_MIN: %d\n", SHRT_MIN);
+    printf("SHRT_MAX: %d\n", SHRT_MAX);
+    printf("INT_MIN: %d\n", INT_MIN);
+    printf("INT_MAX: %d\n", INT_MAX);
+    printf("UINT_MAX: %d\n", UINT_MAX);
+    return 0;
+}
+```
+### Wrapping
+```
+#include <stdio.h>
+
+int main()
+{
+    char c = 'C';
+    printf("%c", c + 255);
+    return 0;
+}
+```
+### Conversions 
+- What happens if you add two different types together? 
+- There are a set of rules defining precedence for what happens exactly 
+- In general, the automatic conversions only apply to those that convert a `narrower` operand into a `wider` one without losing information
+	- eg integer into a float 
+	- Can lose precision if we go the other way
+- Note: char is just a smaller integer! Can be used freely in expressions...
+- Different machines may have different standards for conversions
+	- ie when converting a char to an int, sign vs zero extension
+- Assignments can also cause conversions (right converted to left)
+### Casting 
+- `(type-name) expression`
+- if you need to force the type you need, not typically recommended
+## Relational Operators and Boolean Logic
+- In C, 1 is treated as True and 0 is treated as False. There are no booleans out of the box
+- There are a few common operators you are likely familiar with 
+	- Greater than (>)
+	- Less than (<)
+	- Greater or equal to (>=)
+	- Less than or equal to (<=)
+- Equal to (\=\=) and Not equal to (!=) have lower precedence
+- Unary operator (!) negates an expression
+- Relational operators are lower down the chain from arithmetic operators
+	- 1+4 <= 4 evaluates to false 
+### Logical Operators
+- These are your bread and butter, and they make the world run!
+	- Logical AND (&&) 
+	- Logical OR (||)
+- Evaluated left to right
+- Short circuit if truth or falsehood is determined
+- Note: these are not the same as (&) and (|) which are bitwise operators (we will learn this later)
+## Continuation of our Function 
+- Let's breakdown further what we did 
+- We *declared* a few variables and then *assigned* a value to each 
+- Eg `int upper; upper = 0;`
+	- This can be combined in a single line too! `int upper = 0`
+- We used a `while` loop here to iterate while a certain condition is true 
+	- We will revisit this later 
+	- The 'body' of the loop is what we will execute continuously 
+```
+while (fahr <= upper) {
+	...
+}
+```
+## A note on Readability
+- In the above code, notice how we indented certain lines
+- In C this is not necessary, but is HIGHLY encouraged to keep code maintainable
+- Technically speaking, the entire line could be written on the same line as long as you have the proper syntax! 
+- Indenting things correctly makes it easier to follow and build on
+- There are even different schools of thought for braces, including on the same line or on next line
+## Arithmetic 
+- As we see in that example, we can do simple math in C very expressively! 
+- In something like Assembly, this isn't possible and you need to execute the right instructions in the right order... You may do a project like this in Computer Architecture!
+```
+	celsius = 5 * (fahr-32) / 9;
+```
+- Integers are not decimals... That division by 9 will *truncate* the output, this is called *integer division*
+	- Truncation means we just drop everything after the decimal, it is **not** rounding
+	- 21 / 2 = 10
+- Arithmetic in C follow PEMDAS as you may expect
+	- Parenthsis
+	- Exponents
+	- Multiplciation / Division
+	- Addition / Subtraction
+### Excercise 
+- Can we play with the temperature function to make it print better? 
+	- modifiers to arg replacements
+- Can we fix arithmetic issues? (grab a row and compare to the *real* calculation)
+	- 0F is not exactly -17C...
+	
