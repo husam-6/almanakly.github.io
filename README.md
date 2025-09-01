@@ -15,15 +15,15 @@ Textbooks are not required, but we will regularly reference the following. You c
 ---
 
 ### Course Policies
-- Grading:  TK
-- Assignments:  TK
-Assignments can be worked on in teams of 2-3, and they are actually encouraged! Late work will get an immediate 10% reduction. Submit your assignments on time!
+- Grading:  50% assignments, 25% quizzes, 20% final projcet, 5% participation
+
+Assignments can be worked on in teams of 2, and they are actually encouraged! Late work will get an immediate 10% reduction. Submit your assignments on time!
 
 ---
 
 ### Scheduling
-- **Lectures**: TK
-- **Office Hours**: TK
+- **Lectures**: Thursdays 6:00PM - 7:50PM
+- **Office Hours**: After class, 8:00PM - 9:00PM
 - **Instructor**: Husam Almanakly
 
 ---
@@ -31,10 +31,6 @@ Assignments can be worked on in teams of 2-3, and they are actually encouraged! 
 ### Lessons
 - [Lesson 1: Intro, Unix, Git](./lessons/CS102%20Lesson%201%20-%20Intro,%20Unix,%20Git.html)  
 - [Lesson 2: Functions, Variables, Types, Operators](./lessons/CS102%20Lesson%202%20-%20Functions,%20Variables,%20Types,%20Operators.html)
+- [Lesson 3: Basic Input + Output, Arrays, More Operators, Conditionals](./lessons/CS102%20Lesson%203%20-%20Basic%20Input%20+%20Output,%20Arrays,%20More%20Operators,%20Conditionals.html)
 
----
-
-### Assignments
-- Assignment 1
-- Assignment 2
 ---
