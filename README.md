@@ -6,10 +6,10 @@ This course introduces core concepts in computer science through hands-on progra
 
 ---
 ### Resources
-- [Course Syllabus](./syllabus.md)  
+- [Course Syllabus](https://cooperunion-my.sharepoint.com/:b:/g/personal/h_almanakly_cooper_edu/EZpAPMCf8wFKtmcXVgJOY2ABthHQD-jTOphIHVV9UiK-7A?e=S6aAYm)
 
 Textbooks are not required, but we will regularly reference the following. You can likely find a PDF online
-- [The C Programming Language, 2nd Edition - Brian W. Kernighan & Dennis M. Ritchie](https://amzn.to/2LovuOa)
+- [The C Programming Language, 2nd Edition - Brian W. Kernighan & Dennis M. Ritchie](https://∂ƒamzn.to/2LovuOa)
 - [Python Programming for the Absolute Beginner, 3rd Edition - Mihael Dawson](https://amzn.to/2LkVOIU)
 
 ---
