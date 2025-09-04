@@ -15,7 +15,7 @@ Textbooks are not required, but we will regularly reference the following. You c
 ---
 
 ### Course Policies
-- Grading:  50% assignments, 25% quizzes, 20% final projcet, 5% participation
+- Grading:  50% assignments, 25% quizzes, 20% final project, 5% participation
 
 Assignments can be worked on in teams of 2, and they are actually encouraged! Late work will get an immediate 10% reduction. Submit your assignments on time!
 
