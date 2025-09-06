@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Lesson 3 - Basic Input + Output, Arrays, More Operators, Conditionals</title>
+  <title>Lesson 3 - Basic Input + Output, Arrays, Conditionals</title>
 	<link rel="stylesheet" href="../assets/css/slides.css">
   <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 
@@ -239,66 +239,6 @@ int main() {
   doSomethingElse();
   printf("After calling doSomethignElse(): %d\n", a);
 }
-```
-
----
-
-## Bitwise Operators 
-
-- Last week we talked a bit about relational operators - these are an extension
-- In C there are 6 bit manipulation operators
-
----
-
-## Bitwise Operators
-
-- `&` bitwise AND
-- `|` bitwise inclusive OR
-- `^` bitwise exclusive OR
-- `<<` left shift
-- `>>` right shift
-- `~` one's complement (unary)
-
----
-
-## Bitwise Operators 
-
-- You can use these alot of the time to do clever operations
-- You should think of the actual number in binary 
-
----
-
-## Bitwise Operators
-
-```
-n = n & 0177;
-x = x | SET_ON;
-```
-
-- 0177 is octal (0 at the start of a number makes it octal, this is 127)
-- Keep only the first 7 bits (01111111)
-- Similarly `|` can be used to 'turn on' bits in the second example
-
----
-
-## Bitwise Operators
-```
-z = z << 1
-```
-
-- Shift operators are neat because they can replace mathematical operations and they are more efficient! 
-- The above example shifts bits over 1 space, meaning its effectively a multiplication by 2 (think binary)
-
----
-
-## Assignment Operator 
-
-- We've already seen plenty of examples of an assignment  
-- Another neat operation we have in C and in many programming languages is the assignment operator
-
-```
-i = i + 2
-i += 2
 ```
 
 ---

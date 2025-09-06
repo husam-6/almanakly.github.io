@@ -1,0 +1,353 @@
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Lesson 4 - Bitwise Operators, Loops, Precedence</title>
+	<link rel="stylesheet" href="../assets/css/slides.css">
+  <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+
+</head>
+<body>
+
+<textarea id="source">
+# Loops, Precedence
+
+TB: 3.5 end of 3
+2.12
+
+---
+
+## Bitwise Operators 
+
+- Last week we talked a bit about relational operators - these are an extension
+- In C there are 6 bit manipulation operators
+
+---
+
+## Bitwise Operators
+
+- `&` bitwise AND
+- `|` bitwise inclusive OR
+- `^` bitwise exclusive OR
+- `<<` left shift
+- `>>` right shift
+- `~` one's complement (unary)
+
+---
+
+## Bitwise Operators 
+
+- You can use these alot of the time to do clever operations
+- You should think of the actual number in binary 
+
+---
+
+## Bitwise Operators
+
+```
+n = n & 0177;
+x = x | SET_ON;
+```
+
+- 0177 is octal (0 at the start of a number makes it octal, this is 127)
+- Keep only the first 7 bits (01111111)
+- Similarly `|` can be used to 'turn on' bits in the second example
+
+---
+
+## Bitwise Operators
+```
+z = z << 1
+```
+
+- Shift operators are neat because they can replace mathematical operations and they are more efficient! 
+- The above example shifts bits over 1 space, meaning its effectively a multiplication by 2 (think binary)
+
+---
+
+## Assignment Operator 
+
+- We've already seen plenty of examples of an assignment  
+- Another neat operation we have in C and in many programming languages is the assignment operator
+
+```
+i = i + 2
+i += 2
+```
+
+---
+
+## Loops 
+
+- Last week we talked about an integral building block in software with conditionals 
+- We already saw some examples of loops, but they are just as important for complex programs
+- Loops are very intuitive - they help you complete a repetitive task
+
+---
+
+## Loops
+
+```
+#include <stdio.h>
+
+int main() {
+  printf("PRINT THIS MESSAGE 0\n");
+  printf("PRINT THIS MESSAGE 1\n");
+  printf("PRINT THIS MESSAGE 2\n");
+  printf("PRINT THIS MESSAGE 3\n");
+  printf("PRINT THIS MESSAGE 4\n");
+  printf("PRINT THIS MESSAGE 5\n");
+  printf("PRINT THIS MESSAGE 6\n");
+  printf("PRINT THIS MESSAGE 7\n");
+  printf("PRINT THIS MESSAGE 8\n");
+  printf("PRINT THIS MESSAGE 9\n");
+  printf("PRINT THIS MESSAGE 10\n");
+}
+```
+
+---
+
+## Loops
+
+```
+#include <stdio.h>
+
+int main() {
+  int i = 0; 
+  while (i < 10) {
+    printf("PRINT THIS MESSAGE %d\n", i);
+    i++;
+  }
+}
+```
+
+---
+
+## Loops 
+
+- You can see how this may be powerful 
+
+```
+while (expression)
+  statement
+```
+
+- This is grammar rule for a while loop
+- You will repeat the statment (block statement for more complicated than 1 line!) until the condition is 0 (false)
+- This also means you can have infinite loops so you need to be careful 
+
+---
+
+## Loops 
+
+```
+for (expr1; expr2; expr3)
+  statement
+```
+
+---
+
+## Loops
+
+- For loops are also super helpful and often more readable, though its often up to personal preference
+- Note you can always write the same logic with either
+- expr1 is initialization, expr2 is your condition, and expr3   is your update expression
+- From K&R TB, this is equivalent to:
+
+```
+expr1;
+while (expr2) {
+  statement
+  expr3;
+}
+```
+
+--- 
+
+## Loops
+
+```
+#include <stdio.h>
+
+int main() {
+  for (int i = 0; i < 10; i++) {
+    printf("PRINT THIS MESSAGE %d\n");
+  }
+}
+```
+
+---
+
+## Loops
+
+```
+#include <ctype.h>
+
+/* atoi: convert s to integer; version 2 */
+
+int atoi(char s[]) {
+  int i, n, sign;
+  for (i = 0; isspace(s[i]); i++) /* skip white space */
+    ;
+  sign = (s[i] == '-') ? -1 : 1;
+  if (s[i] == '+' || s[i] == '-') /* skip sign */
+    i++;
+  for (n = 0; isdigit(s[i]); i++)
+    n = 10 * n + (s[i] - '0');
+
+  int result = sign * n;
+  printf("%d", result);
+  return 0;
+}
+```
+
+---
+
+## Loops
+
+```
+#include <string.h>
+
+/* reverse: reverse string s in place */
+
+void reverse(char s[]) {
+  int c, i, j;
+  for (i = 0, j = strlen(s)-1; i < j; i++, j--) {
+    c = s[i];
+    s[i] = s[j];
+    s[j] = c;
+  }
+  printf("%s", s);
+}
+```
+
+- Complex expression in the for loop, uses the `,` operator
+- "A pair of expressions separated by a comma is evaluated left to right, and the type and value of the result are the type and value of the right operand"
+
+---
+
+## Loops 
+
+- Any of the expressions in the for loop can be removed, and it will just be missing from the logic 
+
+```
+for (;;) {
+  ...
+}
+```
+
+- This is an infinite loop, equivalent to while(1)
+
+---
+
+## Loops
+
+- Another type of loop - *do-while*
+- In while + for loops, we test the condition to break from the loop at the top 
+- What if you wanted to do the opposite? Execute the code, then check the condition at the end? 
+
+```
+do
+  statement
+while (expression);
+```
+
+- Think of it like an upside down while 
+- This is used alot less frequently, and once again, you can accomplish the same logic by tweaking the other loops we've seen
+
+---
+
+## Break and Continue
+
+- Two new keywords in C
+- These are used to manipulate the control sequence in a loop 
+- *continue* lets you skip to the next iteration
+- *break* lets you early exit the loop all together 
+
+---
+
+## Break and Continue
+
+```
+/* trim: remove trailing blanks, tabs, newlines */
+int trim(char s[])
+{
+  int n;
+  for (n = strlen(s)-1; n >= 0; n--) {
+    if (s[n] != ' ' && s[n] != '\t' && s[n] != '\n') {
+      break;
+    }
+  }
+  s[n+1] = '\0';
+  return n;
+}
+```
+
+---
+
+## Break and Continue
+
+- Continue is less used but definitely valuable at times
+- Maybe you're processing a set and you want to skip if a certain condition is met
+- Continue just brings you to the test condition stage
+
+```
+for (i = 0; i < n; i++)
+  if (a[i] < 0) /* skip negative elements */
+    continue;
+  ... 
+  /* do positive elements */
+```
+
+---
+
+## Goto and labels
+
+- Highly discouraged to use this... 
+- This let's you set a *label* where you want to explicitly want process to *goto*
+- You can almost always write a program without this and it makes debugging very messy, so avoid
+
+---
+
+## Precedence
+- Just like PEMDAS and math operations, there is a precedence for all C operations
+- You won't know all of these yet, we will review most of them with time 
+- When two operators have the same precedence, theres an associativity rule that gets applied to decide the order 
+- Think multiplication and division... We do those two things left to right
+- 1 / 10 * 5
+
+---
+
+## Precedence
+
+| Precedence (High → Low) | Operators | Associativity | Notes |
+|--------------------------|-----------|---------------|-------|
+| 1            | `()`, `[]`, `->`, `.` | Left → Right | Function call, array, struct access |
+| 2 | `!`, `~`, `++`, `--`, `+` (unary), `-` (unary), `*` (pointer), `&` (address), `(type)` | Right → Left | Unary / type cast |
+| 3 | `*`, `/`, `%` | Left → Right | Multiply, divide, modulo |
+| 4 | `+`, `-` | Left → Right | Addition, subtraction |
+| 5 | `<<`, `>>` | Left → Right | Bit shifts |
+| 6 | `<`, `<=`, `>`, `>=` | Left → Right | Comparisons |
+---
+
+## Precedence
+
+| Precedence (High → Low) | Operators | Associativity | Notes |
+|--------------------------|-----------|---------------|-------|
+| 7            | `==`, `!=` | Left → Right | Equality / inequality |
+| 8 | `&` | Left → Right | Bitwise AND |
+| 9 | `^` | Left → Right | Bitwise XOR |
+| 10 | `｜` | Left → Right | Bitwise OR |
+| 11 | `&&` | Left → Right | Logical AND |
+| 12 | `｜｜` | Left → Right | Logical OR |
+
+---
+
+
+## Precedence
+| Precedence (High → Low) | Operators | Associativity | Notes |
+|--------------------------|-----------|---------------|-------|
+| 13            | `?:` | Right → Left | Ternary conditional |
+| 14 | `=`, `+=`, `-=`, `*=`, `/=`, `%=` , `&=`, `^=`, `｜=`, `<<=`, `>>=` | Right → Left | Assignment ops |
+| 15 (lowest) | `,` | Left → Right | Comma (sequence) |
+</textarea> <script> var slideshow = remark.create(); </script> </body> </html>
