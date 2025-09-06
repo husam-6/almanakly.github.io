@@ -31,7 +31,7 @@ Assignments can be worked on in teams of 2, and they are actually encouraged! La
 ### Lessons
 - [Lesson 1: Intro, Unix, Git](./lessons/CS102%20Lesson%201%20-%20Intro,%20Unix,%20Git.html)  
 - [Lesson 2: Functions, Variables, Types, Operators](./lessons/CS102%20Lesson%202%20-%20Functions,%20Variables,%20Types,%20Operators.html)
-- [Lesson 3: Basic Input + Output, Arrays, More Operators, Conditionals](./lessons/CS102%20Lesson%203%20-%20Basic%20Input%20+%20Output,%20Arrays,%20Conditionals.html)
+- [Lesson 3: Basic Input + Output, Arrays, Conditionals](./lessons/CS102%20Lesson%203%20-%20Basic%20Input%20+%20Output,%20Arrays,%20Conditionals.html)
 - [Lesson 4: Loops, Precedence](./lessons/CS102%20Lesson%204%20-%20Bitwise%20Operators,%20Loops,%20Precedence.html)
 
 ---
