@@ -25,7 +25,7 @@ This class is by no means going to teach you everything about C. C is a complica
 ---
 ## Functions
 
--  are a key part of programming in C. We discussed in last class how you can use it to define a set of instructions to execute
+- Functions are a key part of programming in C. We discussed in last class how you can use it to define a set of instructions to execute
 - *main* is a special function in C - this is where your program begins executions 
 - Every program must have 1 main function somewhere
 
@@ -55,14 +55,7 @@ int main() {
 - \n is a newline character - this function will not put output on a newline by default!
 - \b is backspace
 - \t is tab 
-- \\" is for double quotes
-
----
-
-### Excercise 
-- Run our program with a few of these
-- Try \c
-- Show some examples with argument substitution
+- \\\" is for double quotes
 
 ---
 
@@ -75,7 +68,7 @@ int main() {
 
 ---
 
-### Variable Name Restrictions
+## Variable Name Restrictions
 - Names are made up of letters and digits
 	- Underscore counts as a letter!
 	- Don't begin variable names with underscore, however, since library routines often use such names
@@ -85,7 +78,7 @@ int main() {
 
 ---
 
-### Variable Name Best Practices
+## Variable Name Best Practices
 - This will sound nerdy, but the naming matters alot!
 - You should pick something which is related to what purposes the variable serves
 - It's a common principle in CS that you should be able to read some code without any comments (if its written in a descriptive fashion)
@@ -102,6 +95,7 @@ short currentFlightMiles;
 
 ---
 
+## Constants
 - Constants should be all caps - these are variables which are not going to change
 	- its bad practice to have 'magic numbers' (random constants without any context)
 - You can also use `#define` to define a constant (this is called a macro)
@@ -118,6 +112,161 @@ void main()
     return;
 }
 ```
+
+---
+
+## Types 
+- In C there are a few major types you should be familiar with 
+	- int - integers. This depends on your machine but often 32 bits (4 bytes)
+	- A bit is a 0 or a 1. You will learn how to read Binary in other classes, for now we won't get into the details. 
+	- `-2^31 to 2^31^` range if signed, `0 to 2^32^ -1` if unsigned
+
+---
+
+## Types
+- float - floating point decimal, how you can represent decimals, often 32bit
+- char - character, 1 byte (or 8 bits). 
+- short - short integer (2 bytes)
+- long - long integer (8 bytes)
+- double - double precision floating point (8 bytes)
+- There are also arrays, structs, unions, and enums which we will get to later 
+- And POINTERS!
+
+---
+
+## In code:
+```
+char a; // a single byte
+int i; // an integer; max is based on machine
+float f; // single-precision floating point number
+double d; // double-precision floating point number
+short int si; // decreases the size of an int; int can be omitted
+long int li; // increase the size of an int; int can be omitted
+```
+
+---
+
+## Limits
+```
+#include <stdio.h>
+#include <limits.h>
+
+int main()
+{
+    printf("CHAR_MIN: %d\n", CHAR_MIN);
+    printf("CHAR_MAX: %d\n", CHAR_MAX);
+    printf("SHRT_MIN: %d\n", SHRT_MIN);
+    printf("SHRT_MAX: %d\n", SHRT_MAX);
+    printf("INT_MIN: %d\n", INT_MIN);
+    printf("INT_MAX: %d\n", INT_MAX);
+    printf("UINT_MAX: %d\n", UINT_MAX);
+    return 0;
+}
+```
+
+---
+
+## Wrapping
+```
+#include <stdio.h>
+
+int main()
+{
+    char c = 'C';
+    printf("%c", c + 255);
+    return 0;
+}
+```
+
+---
+
+## Arithmetic 
+- As we see in that example, we can do simple math in C very expressively! 
+- In something like Assembly, this isn't possible and you need to execute the right instructions in the right order... You may do a project like this in Computer Architecture!
+```
+	celsius = 5 * (fahr-32) / 9;
+```
+
+---
+
+## Arithmetic
+- Integers are not decimals... That division by 9 will *truncate* the output, this is called *integer division*
+	- Truncation means we just drop everything after the decimal, it is **not** rounding
+	- 21 / 2 = 10
+- Arithmetic in C follow PEMDAS as you may expect
+	- Parenthsis
+	- Exponents
+	- Multiplciation / Division
+	- Addition / Subtraction
+
+---
+
+## Arithmetic Operations 
+- In addition to traditional operations, we have the modolu (%) operator
+- This gives you the remainder of a division operation 
+- 10 % 2 = 0
+- 11 % 2 = 1
+- 12 % 15 = 12
+
+---
+
+## Arithmetic Operation
+```
+x % 2 == 0
+```
+
+- This check is very *very* common - checks if a number if even!
+
+---
+
+## Relational Operators and Boolean Logic
+- In C, 1 is treated as True and 0 is treated as False. There are no booleans out of the box
+- There are a few common operators you are likely familiar with 
+	- Greater than (>)
+	- Less than (<)
+	- Greater or equal to (>=)
+	- Less than or equal to (<=)
+
+---
+
+## Relational Operators and Boolean Logic
+- Equal to (==) and Not equal to (!=) have lower precedence
+- Unary operator (!) negates an expression
+- Relational operators are lower down the chain from arithmetic operators
+	- 1+4 <= 4 evaluates to false 
+
+---
+
+## Logical Operators
+- These are your bread and butter, and they make the world run!
+	- Logical AND (&&) 
+	- Logical OR (||)
+- Evaluated left to right
+- Short circuit if truth or falsehood is determined
+- Note: these are not the same as (&) and (|) which are bitwise operators (we will learn this later)
+
+---
+
+## Conversions 
+- What happens if you add two different types together? 
+- There are a set of rules defining precedence for what happens exactly 
+- In general, the automatic conversions only apply to those that convert a `narrower` operand into a `wider` one without losing information
+	- eg integer into a float 
+	- Can lose precision if we go the other way
+
+---
+
+## Conversions
+- Note: char is just a smaller integer! Can be used freely in expressions...
+- Different machines may have different standards for conversions
+	- ie when converting a char to an int, sign vs zero extension
+- Assignments can also cause conversions (right converted to left)
+
+---
+
+## Casting 
+- `(type-name) expression`
+- if you need to force the type you need, not typically recommended
 
 ---
 
@@ -156,122 +305,6 @@ int main() {
 
 ---
 
-## Types 
-- In C there are a few major types you should be familiar with 
-	- int - integers. This depends on your machine but often 32 bits (4 bytes)
-	- A bit is a 0 or a 1. You will learn how to read Binary in other classes, for now we won't get into the details. 
-	- `-2^31 to 2^31^` range if signed, `0 to 2^32^ -1` if unsigned
-
----
-
-## Types
-- float - floating point decimal, how you can represent decimals, often 32bit
-- char - character, 1 byte (or 8 bits). 
-- short - short integer (2 bytes)
-- long - long integer (8 bytes)
-- double - double precision floating point (8 bytes)
-- There are also arrays, structs, unions, and enums which we will get to later 
-- And POINTERS!
-
----
-
-### In code:
-```
-char a; // a single byte
-int i; // an integer; max is based on machine
-float f; // single-precision floating point number
-double d; // double-precision floating point number
-short int si; // decreases the size of an int; int can be omitted
-long int li; // increase the size of an int; int can be omitted
-```
-
----
-
-### Limits
-```
-#include <stdio.h>
-#include <limits.h>
-
-int main()
-{
-    printf("CHAR_MIN: %d\n", CHAR_MIN);
-    printf("CHAR_MAX: %d\n", CHAR_MAX);
-    printf("SHRT_MIN: %d\n", SHRT_MIN);
-    printf("SHRT_MAX: %d\n", SHRT_MAX);
-    printf("INT_MIN: %d\n", INT_MIN);
-    printf("INT_MAX: %d\n", INT_MAX);
-    printf("UINT_MAX: %d\n", UINT_MAX);
-    return 0;
-}
-```
-
----
-
-### Wrapping
-```
-#include <stdio.h>
-
-int main()
-{
-    char c = 'C';
-    printf("%c", c + 255);
-    return 0;
-}
-```
-
----
-
-### Conversions 
-- What happens if you add two different types together? 
-- There are a set of rules defining precedence for what happens exactly 
-- In general, the automatic conversions only apply to those that convert a `narrower` operand into a `wider` one without losing information
-	- eg integer into a float 
-	- Can lose precision if we go the other way
-
----
-
-## Conversions
-- Note: char is just a smaller integer! Can be used freely in expressions...
-- Different machines may have different standards for conversions
-	- ie when converting a char to an int, sign vs zero extension
-- Assignments can also cause conversions (right converted to left)
-
----
-
-### Casting 
-- `(type-name) expression`
-- if you need to force the type you need, not typically recommended
-
----
-
-## Relational Operators and Boolean Logic
-- In C, 1 is treated as True and 0 is treated as False. There are no booleans out of the box
-- There are a few common operators you are likely familiar with 
-	- Greater than (>)
-	- Less than (<)
-	- Greater or equal to (>=)
-	- Less than or equal to (<=)
-
----
-
-## Relational Operators and Boolean Logic
-- Equal to (\=\=) and Not equal to (!=) have lower precedence
-- Unary operator (!) negates an expression
-- Relational operators are lower down the chain from arithmetic operators
-	- 1+4 <= 4 evaluates to false 
-
----
-
-### Logical Operators
-- These are your bread and butter, and they make the world run!
-	- Logical AND (&&) 
-	- Logical OR (||)
-- Evaluated left to right
-- Short circuit if truth or falsehood is determined
-- Note: these are not the same as (&) and (|) which are bitwise operators (we will learn this later)
-
----
-
 ## Continuation of our Function 
 - Let's breakdown further what we did 
 - We *declared* a few variables and then *assigned* a value to each 
@@ -294,30 +327,16 @@ while (fahr <= upper) {
 
 ---
 
-## Arithmetic 
-- As we see in that example, we can do simple math in C very expressively! 
-- In something like Assembly, this isn't possible and you need to execute the right instructions in the right order... You may do a project like this in Computer Architecture!
-```
-	celsius = 5 * (fahr-32) / 9;
-```
+## Excercise 
+- Run our program with a few of these
+- Try \c
+- Show some examples with argument substitution
 
 ---
 
-## Arithmetic
-- Integers are not decimals... That division by 9 will *truncate* the output, this is called *integer division*
-	- Truncation means we just drop everything after the decimal, it is **not** rounding
-	- 21 / 2 = 10
-- Arithmetic in C follow PEMDAS as you may expect
-	- Parenthsis
-	- Exponents
-	- Multiplciation / Division
-	- Addition / Subtraction
-
----
-
-### Excercise 
+## Excercise 
 - Can we play with the temperature function to make it print better? 
-	- modifiers to arg replacements
+	- modifiers to arg replacements (eg "%6d")
 - Can we fix arithmetic issues? (grab a row and compare to the *real* calculation)
 	- 0F is not exactly -17C...
 </textarea> <script> var slideshow = remark.create(); </script> </body> </html>
