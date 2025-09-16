@@ -33,5 +33,6 @@ Assignments can be worked on in teams of 2, and they are actually encouraged! La
 - [Lesson 2: Functions, Variables, Types, Operators](./lessons/CS102%20Lesson%202%20-%20Functions,%20Variables,%20Types,%20Operators.html)
 - [Lesson 3: Basic Input + Output, Arrays, Conditionals](./lessons/CS102%20Lesson%203%20-%20Basic%20Input%20+%20Output,%20Arrays,%20Conditionals.html)
 - [Lesson 4: Loops, Precedence](./lessons/CS102%20Lesson%204%20-%20Bitwise%20Operators,%20Loops,%20Precedence.html)
+- [Lesson 5: Functions, Recursion, Scope](./lessons/CS102%20Lesson%205%20-%20Basic%20Functions,%20Recursion,%20Scope.html)
 
 ---
