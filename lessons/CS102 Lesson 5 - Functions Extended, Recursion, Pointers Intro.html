@@ -1,0 +1,503 @@
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Lesson 5 - Functions Extended, Recursion, Pointers Intro</title>
+	<link rel="stylesheet" href="../assets/css/slides.css">
+  <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+
+</head>
+<body>
+
+<textarea id="source">
+# Functions, Recursion, Scope
+
+TB: chapter 4
+
+
+---
+
+## Functions
+
+- We've previously discussed what a function is and how it is the building block for complex programs
+- Breaking up large tasks into smaller, modular functions is how you can achieve many projects in a readable and maintainable fashion 
+- Reading code which is split up neatly is way easier than what some may call 'cut and paste' or 'spaghetti code'
+
+---
+
+## Functions 
+
+- The way C is designed makes using functions super easy 
+- Your program will usually live in *one or more source files* 
+- Think about stdio.h... That code lives somewhere right? 
+- Its written in another source file and compiled separately! 
+- You can manage a complex program with a Makefile
+
+---
+
+## Makefile Example
+
+- In the following example, we assume we have the structure: 
+- Makefile
+- main.c
+- helper.c
+- helper.h
+
+---
+
+## Makefile Example 
+
+```
+# A simple Makefile example for CS102 students
+
+# Compiler and flags
+CC = gcc
+CFLAGS = -Wall -g
+
+# Target program
+TARGET = hello
+
+# Build the program
+$(TARGET): main.o helper.o
+	$(CC) $(CFLAGS) -o $(TARGET) main.o helper.o
+
+# Compile source files into object files
+main.o: main.c helper.h
+	$(CC) $(CFLAGS) -c main.c
+
+helper.o: helper.c helper.h
+	$(CC) $(CFLAGS) -c helper.c
+
+# Clean up build files
+clean:
+	rm -f *.o $(TARGET)
+```
+
+---
+
+## Makefile Example
+
+```
+#include <stdio.h>
+#include "helper.h"
+
+int main() {
+    say_hello();
+    return 0;
+}
+```
+
+---
+
+## Makefile Example 
+
+helper.c
+```
+#include <stdio.h>
+#include "helper.h"
+
+void say_hello() {
+    printf("Hello, CS102 students!\n");
+}
+```
+
+---
+
+## Makefile Example 
+
+helper.h
+```
+#ifndef HELPER_H  // This is to dedupe the header files being included!
+#define HELPER_H
+
+void say_hello();
+
+#endif
+```
+
+---
+
+## Makefile Example 
+
+- Above we used a `header file`
+- This is typically where you store definitions and declarations shared across files 
+- You centralize this in a header file so you track one copy and update as your program updates 
+- You should abstract as much information needed in this header file so that any consumers can use the functionality they need 
+- This makes it easy to port functionality between your files 
+
+---
+
+## Makefile Example
+
+- Run `make`
+- Will output an executable `hello` file
+- ./hello
+- Run `make clean` to remove all .o files and the hello program
+
+---
+
+## Functions
+
+- Let's continue our discussion over functions with an example of the `grep` function 
+- This is the Unix command for searching for a specific pattern 
+- Note: this is not the full grep command, only a small specific sub case
+- K&R pg 62
+
+---
+
+## Search
+
+- This program will print the entire line when a certain pattern is found 
+
+```
+Ah Love! could you and I with Fate conspire
+To grasp this sorry Scheme of Things entire,
+Would not we shatter it to bits -- and then
+Re-mould it nearer to the Heart's Desire!
+```
+
+- if we ran on the above for `ould` we would find: 
+
+```
+Ah Love! could you and I with Fate conspire
+Would not we shatter it to bits -- and then
+Re-mould it nearer to the Heart's Desire!
+```
+
+---
+
+## Search 
+
+- High level flow / Pseudocode
+
+```
+while (there's another line)
+  if (the line contains the pattern)
+    print it
+```
+
+---
+
+## Search 
+
+- In the above pseudocode, we can abstract alot of the logic using functions
+- `getline` (implemented earlier in K&R TB) is what we would use in the while loop
+- `printf` for the print statement 
+- Let's write a function for the second line
+- This is a really good example of when we would want to abstract some logic into a function 
+
+---
+
+## Search 
+
+```
+#include <stdio.h>
+#define MAXLINE 1000 /* maximum input line length */
+
+int getline(char line[], int max)
+int strindex(char source[], char searchfor[]);
+
+char pattern[] = "ould"; /* pattern to search for */
+
+/* find all lines matching pattern */
+main() {
+  char line[MAXLINE];
+  int found = 0;
+  while (getline(line, MAXLINE) > 0) {
+    if (strindex(line, pattern) >= 0) {
+      printf("%s", line);
+      found++;
+    }
+  }
+  return found;
+}
+```
+
+---
+
+## Search
+
+```
+/* getline: get line into s, return length */
+int getline(char s[], int lim) {
+  int c, i;
+  i = 0;
+  while (--lim > 0 && (c=getchar()) != EOF && c != '\n')
+    s[i++] = c;
+  if (c == '\n')
+    s[i++] = c;
+  s[i] = '\0';
+  return i;
+}
+
+```
+
+---
+
+## Search 
+
+```
+/* strindex: return index of t in s, -1 if none */
+int strindex(char s[], char t[]) {
+  int i, j, k;
+  for (i = 0; s[i] != '\0'; i++) {
+    for (j=i, k=0; t[k]!='\0' && s[j] == t[k]; j++, k++)
+      ;
+    if (k > 0 && t[k] == '\0')
+      return i;
+  }
+  return -1;
+}
+```
+
+- Trace example of 'hello world' with search string 'orld'
+
+---
+
+## Search 
+
+- You can see the value of programming using functions like above 
+- You build a bunch of programs, do something complicated, let them talk through arguments, etc 
+- `return` is actually used in these examples too - what your function outputs
+- The above example for the search program even returns the number of matches from the program
+- You can find this in your environment, on Unix environments this will be stored in `$?` - this is a special parameter holding the output of the last program
+
+---
+
+## atof
+
+- Let's look at another example from the K&R book
+
+```
+#include <ctype.h>
+/* atof: convert string s to double */
+double atof(char s[]) {
+  double val, power;
+  int i, sign;
+  for (i = 0; isspace(s[i]); i++) /* skip white space */
+    ;
+  sign = (s[i] == '-') ? -1 : 1;
+  if (s[i] == '+' || s[i] == '-')
+    i++;
+  for (val = 0.0; isdigit(s[i]); i++)
+    val = 10.0 * val + (s[i] - '0');
+  if (s[i] == '.')
+    i++;
+  for (power = 1.0; isdigit(s[i]); i++) {
+    val = 10.0 * val + (s[i] - '0');
+    power *= 10;
+  }
+  return sign * val / power;
+}
+```
+
+---
+
+## atof - usage
+
+```
+#include <stdio.h>
+#define MAXLINE 100
+/* rudimentary calculator */
+main() {
+  double sum, atof(char []);
+  char line[MAXLINE];
+  int getline(char line[], int max);
+
+  sum = 0;
+  while (getline(line, MAXLINE) > 0)
+    printf("\t%g\n", sum += atof(line));
+  return 0;
+}
+```
+
+- Here we declare the function we defined above so that we ensure typing matches
+- This is just a super simple calculator which adds all the lines you type 
+
+---
+
+## Scope
+
+- We mentioned in a previous lecture that variables can have scope
+- They can be only 'visible' within a given function if they are local 
+- You can have, however, *external* or *global* variables which can be accessed in any function 
+- Functions always have external scope, you can't have nested functions in C 
+- This should be used with caution, and can make your program harder to read and maintain 
+
+---
+
+## Scope 
+
+```
+#include<stdio.h>
+
+int variable = 0; 
+
+void foo() {
+  variable++;
+}
+
+int main() {
+  printf("Variable: %d\n", variable);
+  variable++; 
+  printf("Variable: %d\n", variable);
+  foo();
+  printf("Variable: %d\n", variable);
+}
+```
+
+---
+
+## Scope 
+
+```
+// Some other file 
+
+int variable = 10; 
+
+int doStuff() {
+  // ...
+  // ...
+}
+```
+
+```
+#include<stdio.h>
+
+extern int variable;
+
+int main() {
+  // ...
+  // ...
+}
+```
+
+
+---
+
+## Scope
+
+- A `qualifier` you can set on external variables is `static` 
+- This just means its global - but can only be accessed in the same file
+
+---
+
+## Recursion
+
+- A super cool and hard to wrap around concept in CS is Recursion
+- This is when you have a function, *which calls itself*
+- You can achieve some really interesting problems with recursion in a very concise and neat manner
+- It's worth noting that any recursive solution can always be implemented iteratively, and recursive functions wont provide you any wins in terms of storage used
+
+---
+
+## Recursion - Fibonacci
+- 1, 1, 2, 3, 5, 8, 13, 21, ..., ... 
+- What if we wanted to calculate this 
+
+```
+#include<stdio.h>
+
+int fibonacci(int n) {
+  if (n <= 1)
+    return 1;
+  return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+int main() {
+  printf("Fibonacci number for: %d is %d\n", 10, fibonacci(10));
+}
+```
+
+---
+
+## Recursive - Fibonacci
+
+ChatGPT generated...
+```
+          fibonacci(4)
+         /            \
+   fibonacci(3)      fibonacci(2)
+    /       \        /       \
+fib(2)     fib(1)  fib(1)   fib(0)
+ /    \
+fib(1) fib(0)
+```
+
+---
+
+## Recursive
+
+- When a function is called, your program sets aside local variables in something called a function frame / stack frame
+- Your computer has a stack of function frames, which manages all your programs. This is called the *call stack*
+- If you abuse a recursive function and forget the base case, you can get STACK OVERFLOW
+- Recursive functions are usually helpful when you need to do things in the order you see them...
+
+---
+
+## Recursive - Iterative Solution
+
+- I mentioned you can always do a recursive function iteratively...
+
+```
+#include<stdio.h>
+
+int main() {
+  int i = 1;
+  int j = 1;
+  int tmp;
+
+  int n = 10;
+  while (n > 1) {
+    tmp = j;
+    j += i;
+    i = tmp;
+    n--;
+  }
+  printf("Fibonacci of 10 is %d\n", j);
+}
+```
+
+---
+
+## Pointers 
+
+- Variable that stores the *memory address* of a variable 
+- Literally *pointing to that variable* 
+- We will continue in this next week, but to give an intro into the topic 
+- Lets look at an example: 
+
+```
+int x = 42;
+int *p = &x;
+```
+
+---
+
+## Pointers 
+
+```
+            +-------+       +--------+
+         x: |  42   |       |  1234  |
+            +-------+       +--------+
+       Address: 1234            ^
+                                |
+                                p
+```
+
+---
+
+## Pointers 
+
+- `&` addrof unary operator gives you the address of a variable 
+- `*` pointer deref unary operator accesses the object being pointed to! 
+- In our previous example, &x = 1234 (address) and p* = 42 (contents)
+
+---
+
+## Pointers 
+
+- Read `int *p` as *p is a pointer to an int*
+- You can do this for all types (char*, double*, float*, void*, etc)
+
+</textarea> <script> var slideshow = remark.create(); </script> </body> </html>
