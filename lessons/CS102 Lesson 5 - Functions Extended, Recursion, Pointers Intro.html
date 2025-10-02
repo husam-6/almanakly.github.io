@@ -500,4 +500,114 @@ int *p = &x;
 - Read `int *p` as *p is a pointer to an int*
 - You can do this for all types (char*, double*, float*, void*, etc)
 
+
+---
+
+## Pointers 
+
+- Pointers can be passed into functions, which can make for tricky logic when you see it for the first time 
+- Parameters are still *passed by value* BUT copying the variable address is a way to get around this
+- Lets look at an example 
+
+---
+
+## Pointers
+
+```
+void swap(int x, int y) /* WRONG */{
+  int temp;
+  temp = x;
+  x = y;
+  y = temp;
+}
+```
+
+---
+
+## Pointers 
+
+```
+void swap(int *px, int *py) /* interchange *px and *py */{
+  int temp;
+  temp = *px;
+  *px = *py;
+  *py = temp;
+}
+```
+
+- This effectively gets around things and gives us a way to alter inputs into a function, which can be super powerful like the above function
+
+---
+
+## Pointers 
+
+```
+   a:  5        b:  9
++-----+       +-----+
+|  5  |       |  9  |
++-----+       +-----+
+  ^              ^
+  |              |
+ &a             &b
+```
+
+swap(&a, &b);
+
+
+---
+
+## Pointers 
+
+- Lets look at one more example... 
+- Lets say we had a function `getint` which converts input chars into integers. 
+- It has to return the integer it converted AND signal when we have reached the end of the file 
+- We need a way to return TWO THINGS
+
+---
+
+## Pointers 
+
+- A solution - return EOF if we have reached end, and modify an input to 'return' the converted chars 
+- Note we are passing `&array[n]` here
+
+```
+int n, array[SIZE], getint(int *);
+for (n = 0; n < SIZE && getint(&array[n]) != EOF; n++)
+  ;
+```
+
+
+---
+
+## Pointers 
+
+```
+int getch(void);
+void ungetch(int);
+/* getint: get next integer from input into *pn */
+int getint(int *pn) {
+  int c, sign;
+  while (isspace(c = getch())) /* skip white space */
+    ;
+
+  if (!isdigit(c) && c != EOF && c != '+' && c != '-') {
+    ungetch(c); /* it is not a number, put it back on the input stream */
+    return 0;
+  }
+
+  sign = (c == '-') ? -1 : 1;
+
+  if (c == '+' || c == '-')
+    c = getch();
+
+  for (*pn = 0; isdigit(c), c = getch())
+    *pn = 10 * *pn + (c - '0');
+
+  *pn *= sign;
+
+  if (c != EOF)
+    ungetch(c);
+  return c;
+}
+```
 </textarea> <script> var slideshow = remark.create(); </script> </body> </html>
