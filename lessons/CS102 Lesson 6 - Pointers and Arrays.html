@@ -1,0 +1,571 @@
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Lesson 6 - Pointers and Arrays</title>
+	<link rel="stylesheet" href="../assets/css/slides.css">
+  <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+
+</head>
+<body>
+
+<textarea id="source">
+## CS102 @ Cooper Union
+
+TB: all of 5 
+
+---
+
+## Review 
+
+- Last week we introduced the concept of a pointer as a type 
+- You can have a pointer to any type 
+- And they can chain! *pointer to pointer to array of pointers to ints* 
+- We went over an example like this
+
+```
+int x = 42;
+int *p = &x;
+```
+
+---
+
+## Review 
+
+```
+            +-------+       +--------+
+         x: |  42   |       |  1234  |
+            +-------+       +--------+
+       Address: 1234            ^
+                                |
+                                p
+```
+
+---
+
+## Review 
+
+- Recall the dereference (*) and addr of (&) operators
+- Sort of opposites of each other but not really 
+- Also recall what an array is... Contiguous block of memory which you can randomly access 
+
+---
+
+## Pointers and Arrays 
+
+- Pointers and arrays are WAY closer related in C than you may expect 
+- "Any operation that can be achieved by array subscripting can also be done with pointers"
+- What does that mean? 
+
+```
+int a[10];
+```
+
+```
++------+------+------+------+------+------+------+------+------+------+
+|  10  | 100  | 2000 | -12  |  31  |  92  |  -1  |   0  |  21  |  22  |
++------+------+------+------+------+------+------+------+------+------+
+```
+
+---
+
+## Pointers and Arrays
+
+- Now lets say we did something like. What does this look like? 
+
+```
+int *pa = &a[0];
+```
+
+---
+
+## Pointers and Arrays 
+
+```
++------+
+|  pa  |---+
++------+    |
+            v
+    a:   +------+------+------+------+------+------+------+------+------+------+
+         |  10  | 100  | 2000 | -12  |  31  |  92  |  -1  |   0  |  21  |  22  |
+         +------+------+------+------+------+------+------+------+------+------+
+            ^
+            |
+         &a[0]
+```
+
+---
+
+## Pointers and Arrays 
+
+- What does this do now? 
+
+```
+int x = *pa;
+```
+
+---
+
+## Pointers and Arrays
+
+- This will *copy the contents* of `a[0]` into x
+
+---
+
+## Pointers and Arrays 
+
+- Now lets say I did this? What will the result be? 
+
+```
+int y = *(pa+1)
+```
+
+---
+
+## Pointers and Arrays 
+
+- This will *copy the contents* of `a[1]`
+
+---
+
+## Pointers and Arrays 
+
+```
+a:   +------+------+------+------+------+------+------+------+------+------+
+     |  10  | 100  | 2000 | -12  |  31  |  92  |  -1  |   0  |  21  |  22  |
+     +------+------+------+------+------+------+------+------+------+------+
+        ^      ^      ^
+        |      |      |
+       pa    pa+1    pa+2
+```
+
+---
+
+## Pointers and Arrays 
+
+- Think of it another way - if pa points to the first element, pa+1 should point to the second logically 
+- Under the hood, the C compiler recognizes pointers and does *pointer arithmetic* 
+- C recognizes the type, and adds the corresponding amount to the address
+- An int is 4 bytes, so it wont just add the number 1 to the address, but will add 4
+
+---
+
+## Pointers and Arrays
+
+- so `*(pa+1)` will copy the elements of the 1st index item
+- `a[i] === *(pa+i)` - C compiler actually converts the array notation to pointer arithmetic 
+- `&a[i] === a+i`
+- `pa[i] === *(pa + i)` - subscript notation on pointers works
+
+---
+
+## Pointers and Arrays
+
+```
+pa     → address 1000
+pa + 1 → address 1004
+pa + 2 → address 1008
+```
+
+---
+
+## Pointers and Arrays
+
+```
+#include <stdio.h>
+
+int main() {
+    int a[10];
+    a[0] = 10;
+    a[1] = 100;
+    a[2] = 2000;
+    a[3] = -12;
+
+    int *p = &a[0];
+
+    printf("%d\n", *p);
+    printf("%d\n", *(p+1));
+    printf("%d\n", *(p+2));
+    printf("%d\n", *(p+3));
+}
+```
+
+---
+
+## Pointers and Arrays
+
+- Note - a pointer is a variable but the array name is not technically! 
+- `pa=a` and `pa++` are valid but `a++` is not
+
+---
+
+## Pointers and Arrays 
+
+- Passing an array name into a function actually passes a pointer to the first element! 
+- Gets around the pass by value requirement of C
+
+
+---
+
+## Pointers and Arrays
+
+```
+/* strlen: return length of string s */
+int strlen(char *s) {
+  int n;
+  for (n = 0; *s != '\0', s++)
+    n++;
+  return n;
+}
+```
+
+```
+strlen("hello, world"); /* string constant */
+strlen(array); /* char array[100]; */
+strlen(ptr); /* char *ptr; */
+```
+
+`char s[]` and `char *s` are equivalent in a function param definition
+
+---
+
+## Address Arithmetic
+
+- We've gone over an example of pointer arithmetic in the context of arrays 
+- This is consistent in C - it extends to all types and many other scenarios 
+- We can demonstrate by walking through K&R's rudimentary alloc and free definitions
+- These functions will allocate and free up memory as the name suggests 
+
+---
+
+## alloc
+
+- We can accomplish this simply put by keeping a super large array to hold space. Call it `allocbuf`
+- Whenever we allocate or free we can return parts of this array
+- This is 'rudimentary' because it will require you to call it in order - free can only be called after alloc
+- We will also need a pointer to track where we are in this array and how much space we have
+
+---
+
+## alloc
+
+```
+before call to alloc:
+                       allocp
+                          ↓
+allocbuf: [■■■■■■■■■■■■■■■■□□□□□□□□□□□□□□□□□□□□]
+          <---- in use ---><------ free ------->
+
+
+after call to alloc:
+                            allocp
+                               ↓
+allocbuf: [■■■■■■■■■■■■■■■■■■■■□□□□□□□□□□□□□□□□□]
+          <------ in use -------><--- free ---->
+
+```
+
+---
+
+## alloc 
+
+```
+// K&R Pg. 101
+#include <stdio.h>
+#define ALLOCSIZE 10000 // size of available space
+
+static char allocbuf[ALLOCSIZE]; // storage for alloc
+static char *allocp = allocbuf;  // next free position
+
+char *alloc(int n) // return pointer to n characters{
+    // it fits?
+    if (allocbuf + ALLOCSIZE - allocp >= n) {
+        allocp += n;
+        return allocp - n; // old p
+    }
+    else // not enough room
+        return 0;
+}
+
+// free storage pointed to by p
+void afree(char *p) {
+    if (p >= allocbuf && p < allocbuf + ALLOCSIZE)
+        allocp = p;
+}
+```
+
+
+---
+
+## alloc
+
+```
+int main()
+{
+    char *spacePtr;
+    int n = 10;
+    spacePtr = alloc(n);
+    printf("spacePtr=%ld, allocp=%ld (diff=%ld)\n",
+       (long)spacePtr, (long)allocp, (long)(allocp - spacePtr));
+
+
+    char *spacePtr2;
+    spacePtr2 = alloc(n);
+    printf("spacePtr=%ld, allocp=%ld (diff=%ld)\n",
+       (long)spacePtr, (long)allocp, (long)(allocp - spacePtr));
+
+
+    afree(spacePtr2);
+    printf("spacePtr=%ld, allocp=%ld (diff=%ld)\n",
+       (long)spacePtr, (long)allocp, (long)(allocp - spacePtr));
+
+    afree(spacePtr);
+    printf("spacePtr=%ld, allocp=%ld (diff=%ld)\n",
+       (long)spacePtr, (long)allocp, (long)(allocp - spacePtr));
+    return 0;
+}
+```
+
+---
+
+## Address Arithmetic
+
+- Relational operators work on pointers when they point to the same type
+- Ie we can check if a pointer is pointing to an earlier or later element
+- Additionally, we can do pointer addition or subtraction...
+- Addition only works though if its a pointer and a number
+- Subtraction can be two pointers (difference)
+- Multiplication or division is not allowed
+
+---
+
+## strlen pt2
+
+```
+/* strlen: return length of string s */
+int strlen(char *s) {
+  char *p = s;
+  while (*p != '\0')
+    p++;
+  return p - s;
+}
+```
+
+---
+
+## Pointers and Arrays 
+
+```
+char amessage[] = "now is the time"; /* an array */
+char *pmessage = "now is the time"; /* a pointer */
+```
+
+- Fundamentally different, handled completely different by compiler
+- First is an 'array' or write memory which we can change. But we can't point it somewhere else or anything 
+- Second is a pointer pointing to the string literal somewhere in read only memory - we can point it somewhere else but we can't change elements'
+
+---
+
+## strcpy
+
+```
+void strcpy(char *s, char *t) {
+  int i;
+  i = 0;
+  while ((s[i] = t[i]) != '\0')
+    i++;
+}
+```
+
+---
+
+## strcpy with pointers 
+
+```
+void strcpy(char *s, char *t) {
+  int i;
+  i = 0;
+  while ((*s = *t) != '\0') {
+    s++;
+    t++;
+  }
+}
+```
+
+---
+
+## strcmp
+
+```
+int strcmp(char *s, char *t){
+  int i;
+  for (i = 0; s[i] == t[i]; i++)
+    if (s[i] == '\0')
+      return 0;
+  return s[i] - t[i];
+}
+```
+
+---
+
+## strcmp with pointers 
+
+```
+int strcmp(char *s, char *t) {
+  for ( ; *s == *t; s++, t++)
+    if (*s == '\0')
+      return 0;
+  return *s - *t;
+}
+```
+
+---
+
+## Pointer Arrays
+
+- Pointers are variables themselves! So you can actually have an array of pointers 
+
+```
+int *arr[3];
+
+            arr (array of int*)
+   +---------+---------+---------+
+   | arr[0]  | arr[1]  | arr[2]  |
+   +----|----+----|----+----|----+
+        |         |         |
+        v         v         v
+```
+
+---
+
+## Pointer Arrays
+
+```
+/* month_name: return name of n-th month */
+char *month_name(int n) {
+  static char *name[] = {
+    "Illegal month",
+    "January", "February", "March",
+    "April", "May", "June",
+    "July", "August", "September",
+    "October", "November", "December"
+  };
+  return (n < 1 || n > 12) ? name[0] : name[n];
+}
+```
+
+- You can already see how they become very useful to represent more complex things...
+- Wait until we add structs
+
+---
+
+## Multi Dimensional Arrays
+
+- You can have an *array of arrays* or multiple dimensions 
+- Less frequently used than pointer arrays 
+
+---
+
+## Multi Dimensional Arrays
+
+```
+#include<stdio.h>
+
+#define SIZE 8
+
+int main() {
+    char board[SIZE][SIZE] = {
+        {'R','K','B','Q','K','B','K','R'},
+        {'p','p','p','p','p','p','p','p'},
+        {0}, {0}, {0}, {0},
+        {'p','p','p','p','p','p','p','p'},
+        {'R','K','B','Q','K','B','K','R'}
+    };
+
+    // Print the board
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++)
+            printf("%c ", board[i][j] ? board[i][j] : '.');
+        printf("\n");
+    }
+    return 0;
+}
+```
+
+---
+
+## Multi Dimensional Arrays
+
+- What if we had to pass in to function? 
+
+```
+f(int daytab[2][13]) { ... } //fully specify
+f(int daytab[][13]) { ... }  // number of rows is irrelevant since as we saw, we are passing a pointer!
+f(int (*daytab)[13]) { ... } // Paranthesis needed, brackets have higher precedence (number of columns also needed)
+```
+
+---
+
+## Pointers vs Multi Dimensional Arrays
+
+```
+int a[10][20];
+int *b[10];
+```
+
+- One is 200 spaces set aside for 2d array (outer array with each element being an array)
+- Second doesn't initialize anything in those inner arrays! They could be variable sized
+
+---
+
+## Pointers vs Multi Dimensional Arrays
+
+```
+char *name[] = { "Illegal month", "Jan", "Feb", "Mar" };
+```
+
+```
+name
++-----+    +------------------+
+|  *  | -> | Illegal month \0 |
++-----+    +-------+
+|  *  | -> | Jan\0 |
++-----+    +-------+
+|  *  | -> | Feb\0 |
++-----+    +-------+
+|  *  | -> | Mar\0 |
++-----+    +-------+
+```
+
+---
+
+## Pointers vs Multi Dimensional Arrays
+
+```
+char aname[][15] = { "Illegal month", "Jan", "Feb", "Mar" };
+```
+```
+Indexes:                 15                               30                                35
+        Illegal month\0  Jan\0 ? ? ? ? ? ? ? ? ? ? ? ? ?  F e b \0 ? ? ? ? ? ? ? ? ? ? ? ?  M a r \0 ? ? ? ? ? ? ? ? ? ? ? ?
+```
+
+---
+
+## Command Line Args 
+
+- Now that we know pointers, we can talk about how we pass in arguments from the command line 
+- When main is called, it gets called with 2 arguments typically named `argc` and `argv`
+- Best explained with an example, this is `echo` unix command 
+
+```
+#include <stdio.h>
+/* echo command-line arguments; 1st version */
+main(int argc, char *argv[]) {
+  int i;
+  for (i = 1; i < argc; i++)
+    printf("%s%s", argv[i], (i < argc-1) ? " " : "");
+  printf("\n");
+  return 0;
+}
+```
+</textarea> <script> var slideshow = remark.create(); </script> </body> </html>
