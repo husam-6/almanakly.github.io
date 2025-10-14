@@ -1,0 +1,806 @@
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Lesson 7 - Structures</title>
+	<link rel="stylesheet" href="../assets/css/slides.css">
+  <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+
+</head>
+<body>
+
+<textarea id="source">
+## CS102 @ Cooper Union
+
+TB: all of 6
+
+
+---
+
+## Structures
+
+- Structs are collections of one or more variables of varying types 
+- They get 'grouped together' under a single object that you can access all together 
+- Not exactly classes and objects though, we will discuss that more when we do Python
+- The value of using structs is best seen through examples 
+
+---
+
+## Structures - Graphing Example
+- Lets take an example we are all familiar with in Calc and Lin alg... Graphing 
+
+```
+      y
+      |
+  5   |
+  4   |
+  3   |               • (3,3)
+  2   |
+  1   |
+  0---+------------------------ x
+       0    1    2    3    4
+```
+
+---
+## Structures 
+- What if you needed to represent a bunch of these? How would you do it programatically? Definitely does not scale to keep having something like
+```
+int p1_x = 4;
+int p1_y = 3;
+int p2_x = 5; 
+int p2_y = 1; 
+... 
+...
+```
+- How would you even track each one?
+
+---
+
+## Structures 
+- You can pretty easily define a structure which can store all the information together 
+```
+struct point {
+	int x;
+	int y;
+};
+```
+
+---
+
+## Structures 
+- struct is a keyword
+- x and y here are called `members`
+- `point` in this example is called the struct tag - this basically names this kind of struct so you can use it as a shorthand after.
+	- ie `struct point pt;`
+- You can basically create your own complicated type
+---
+
+## Structures
+
+```
+#include <stdio.h>
+#include <math.h>
+struct point {
+	int x;
+	int y;
+};
+
+double calculateDistanceToOrigin(struct point p) {
+    return sqrt(p.x * p.x + p.y * p.y); 
+}
+
+int main(int argc, char *argv[]) {
+    struct point p1 = {-1, 2};
+    struct point p2 = {3, 4}; 
+
+    printf("Point 1: (%d, %d), distance from origin: %lf\n", 
+	    p1.x, p1.y, calculateDistanceToOrigin(p1)); 
+    printf("Point 2: (%d, %d), distance from origin: %lf\n", 
+	    p2.x, p2.y, calculateDistanceToOrigin(p2)); 
+}
+
+```
+
+---
+## Structures
+- This example shows you can pretty easily initialize a struct with its values using curly bracket notation 
+- Functions!
+---
+## Rectangles 
+- Lets look at another extension of this case
+- You can use 2 points to define a rectangle (recall lin alg!)
+
+```
+      y
+      |
+  5   |
+  4   |     +---------. (3,4)
+  3   |     |         |
+  2   |     |         |
+  1   |(1,1).---------+
+  0---+------------------------ x
+       0    1    2    3    4
+```
+
+---
+## Rectangles 
+```
+#include <stdio.h>
+#include <math.h>
+struct point {
+	int x;
+	int y;
+};
+
+struct rectangle {
+    struct point p1; 
+    struct point p2;
+};
+
+double calculateRectangleArea(struct rectangle r) {
+    return sqrt(pow(r.p1.x - r.p2.x, 2) * pow(r.p1.y - r.p2.y, 2));
+}
+
+int main(int argc, char *argv[]) {
+    struct point p1 = {-1, 2};
+    struct point p2 = {3, 4}; 
+    struct rectangle r = {p1, p2};
+
+    printf("Rectangle with points: (%d, %d), and (%d, %d). Has area: %lf\n",
+	 r.p1.x, r.p1.y, r.p2.x, r.p2.y, calculateRectangleArea(r));
+}
+```
+
+---
+## Structures and Functions
+- The examples I've shown already give you a sneak peak on how you may use a struct with functions... 
+- You can get even more clever and write some functions to help build your structs in a cleaner way 
+- This extends easily when your applications get complicated 
+---
+## Structures and Functions
+```
+/* makepoint: make a point from x and y components */
+struct point makepoint(int x, int y) {
+	struct point temp;
+	temp.x = x;
+	temp.y = y;
+	return temp;
+}
+```
+- Much cleaner this way than bracket notation! 
+---
+## Structures and Functions
+```
+struct rect screen;
+struct point middle;
+struct point makepoint(int, int);
+screen.pt1 = makepoint(0,0);
+screen.pt2 = makepoint(XMAX, YMAX);
+middle = makepoint((screen.pt1.x + screen.pt2.x)/2,
+				   (screen.pt1.y + screen.pt2.y)/2);
+```
+---
+## Structures and Functions
+- We already saw some functions which help us do arithmetic
+
+```
+/* addpoints: add two points */
+struct addpoint(struct point p1, struct point p2) {
+	p1.x += p2.x;
+	p1.y += p2.y;
+	return p1;
+}
+```
+- Hopefully its becoming clear how useful this can be
+---
+## Structures and Functions
+
+```
+/* pointInRectangle: return 1 if p in r, 0 if not */
+int pointInRectangle(struct point p, struct rect r) {
+	return p.x >= r.pt1.x && p.x < r.pt2.x
+		   && p.y >= r.pt1.y && p.y < r.pt2.y;
+}
+```
+- Note: this is assuming pt1 is always the 'lower' point from p2
+- How could we enforce that though? 
+---
+## Structures and Functions 
+
+```
+#define min(a, b) ((a) < (b) ? (a) : (b))
+#define max(a, b) ((a) > (b) ? (a) : (b))
+
+/* canonrect: canonicalize coordinates of rectangle */
+struct rect canonicalizeRectangle(struct rect r) {
+	struct rect temp;
+	temp.pt1.x = min(r.pt1.x, r.pt2.x);
+	temp.pt1.y = min(r.pt1.y, r.pt2.y);
+	temp.pt2.x = max(r.pt1.x, r.pt2.x);
+	temp.pt2.y = max(r.pt1.y, r.pt2.y);
+	return temp;
+}
+```
+
+---
+## Pass by Value 
+- Recall that C makes copies of parameters when a function is called 
+- We learned about pointers last week! Generally its more efficient to pass a pointer to the struct instead of the full object being copied over 
+- That also lets you manipulate it easier 
+- `struct point *pp;`
+---
+## Pointers to Structs
+```
+struct point origin, *pp;
+pp = &origin;
+printf("origin is (%d,%d)\n", (*pp).x, (*pp).y);
+```
+- Note the paranthesis which are necessary`(*pp).x` 
+- structure member `.` has higher precedence than pointer deref `*`
+---
+## Pointers to Structs
+- This pattern is so often used, theres a shorthand which is super intuitive for it 
+```
+struct point origin, *pp;
+pp = &origin;
+printf("origin is (%d,%d)\n", pp->x, pp->y);
+```
+- Literally `->` pointing to the member you want
+---
+## Pointers to Structs
+```
+struct rect r, *rp = &r;
+
+/* ALL EQUIVALENT */
+r.pt1.x
+rp->pt1.x
+(r.pt1).x
+(rp->pt1).x
+```
+
+---
+## Rectangle Example
+```
+#include <stdio.h>
+#include <math.h>
+struct point {
+	int x;
+	int y;
+};
+
+struct rectangle {
+    struct point p1; 
+    struct point p2;
+};
+
+int main(int argc, char *argv[]) {
+    struct point p1 = {-1, 2};
+    struct point p2 = {3, 4}; 
+    struct rectangle r = {p1, p2};
+
+    struct rectangle *pp = &r; 
+
+    printf("Rectangle points: (%d, %d), (%d, %d)\n", 
+	    (*pp).p1.x, (*pp).p1.y, (*pp).p2.x, (*pp).p2.y);
+    printf("Rectangle points using ->: (%d, %d), (%d, %d)\n", 
+	    pp->p1.x, pp->p1.y, pp->p2.x, pp->p2.y);
+}
+```
+
+---
+## Structs, pointers, precedence
+- We already saw `.` has higher precedence than `*`
+- Couple more things to note 
+- `->` and `()` for functions calls and `[]` for array subscripting are all at the top of precedence 
+- So lets take this example 
+
+```
+struct {
+	int len;
+	char *str;
+} *p;
+```
+- What happens if we did `++p->len` ?
+---
+## Structs, pointers, precedence
+```
+#include <stdio.h>
+
+struct String {
+    int len;
+    char *str;
+};
+
+int main() {
+    struct String s; 
+    s.len = 5; 
+    s.str = "CS102"; 
+
+    struct String *p = &s; 
+    // p-> is higher precedence! ++(p->len) is implied paranthesis
+    printf("++p->len = %d\n", ++p->len); 
+}
+```
+---
+## Array of Structs
+- From the K&R book, lets imagine you needed to count the occurrences of all the C keywords in a program 
+- You'd need to track an array of the names and one for the counts
+- That should tell you that you can probably organize things better
+```
+char *keyword[NKEYS];
+int keycount[NKEYS];
+```
+---
+## Array of Structs 
+- Instead - we can track an array of structs representing each keyword! 
+
+```
+struct key {
+	char *word;
+	int count;
+}; 
+struct key keytab[NKEYS];
+```
+- Even better than this, we know all the keywords ahead of time - its a constant set 
+- We can initialize everything to 0 count and that would make tracking this alot easier 
+
+---
+## Array of Structs
+```
+#include <stdio.h>
+#include <ctype.h>
+#include <string.h>
+
+#define MAXWORD 100
+
+struct key {
+	char *word;
+	int count;
+} keytab[] = {
+	"auto", 0,
+	"break", 0,
+	"case", 0,
+	"char", 0,
+	"const", 0,
+	"continue", 0,
+	"default", 0,
+	/* ... */
+	"unsigned", 0,
+	"void", 0,
+	"volatile", 0,
+	"while", 0
+};
+
+```
+---
+## Array of Structs
+```
+#define NKEYS (sizeof keytab / sizeof keytab[0])
+
+int getword(char *, int);
+int binsearch(char *, struct key *, int);
+
+/* count C keywords */
+int main() {
+	int n;
+	char word[MAXWORD];
+	while (getword(word, MAXWORD) != EOF)
+		if (isalpha(word[0]))
+			if ((n = binsearch(word, keytab, NKEYS)) >= 0)
+				keytab[n].count++;
+	for (n = 0; n < NKEYS; n++)
+		if (keytab[n].count > 0)
+			printf("%4d %s\n", keytab[n].count, keytab[n].word);
+	return 0;
+}
+```
+
+
+---
+## Array of Structs
+```
+/* binsearch: find word in tab[0]...tab[n-1] */
+int binsearch(char *word, struct key tab[], int n) {
+	int cond;
+	int low, high, mid;
+	low = 0;
+	high = n - 1;
+	while (low <= high) {
+		mid = (low+high) / 2;
+		if ((cond = strcmp(word, tab[mid].word)) < 0)
+			high = mid - 1;
+		else if (cond > 0)
+			low = mid + 1;
+		else
+			return mid;
+	}
+	return -1;
+}
+```
+
+---
+## Array of Structs 
+```
+/* getword: get next word or character from input */
+int getword(char *word, int lim) {
+	int c, getch(void);
+	void ungetch(int);
+	char *w = word;
+	while (isspace(c = getch()))
+		;
+	if (c != EOF)
+		*w++ = c;
+	if (!isalpha(c)) {
+		*w = '\0';
+		return c;
+	}
+	for ( ; --lim > 0; w++)
+		if (!isalnum(*w = getch())) {
+			ungetch(*w);
+			break;
+		}
+	*w = '\0';
+	return word[0];
+}
+```
+
+---
+## Array of Structs 
+- getch and ungetch 
+- We used these before but never showed them explicitly
+
+```
+#define BUFSIZE 100
+
+char buf[BUFSIZE]; /* buffer for ungetch */
+int bufp = 0; /* next free position in buf */
+int getch(void) /* get a (possibly pushed-back) character */ {
+	return (bufp > 0) ? buf[--bufp] : getchar();
+}
+
+void ungetch(int c) /* push character back on input */ {
+	if (bufp >= BUFSIZE)
+		printf("ungetch: too many characters\n");
+	else
+		buf[bufp++] = c;
+}
+```
+
+---
+## Pointers to Structs
+- Using pointers instead
+
+```
+#include <stdio.h>
+#include <ctype.h>
+#include <string.h>
+#define MAXWORD 100
+
+int getword(char *, int);
+struct key *binsearch(char *, struct key *, int);
+
+/* count C keywords; pointer version */
+main(){
+	char word[MAXWORD];
+	struct key *p;
+	while (getword(word, MAXWORD) != EOF)
+		if (isalpha(word[0]))
+			if ((p=binsearch(word, keytab, NKEYS)) != NULL)
+	p->count++;
+	for (p = keytab; p < keytab + NKEYS; p++)
+		if (p->count > 0)
+	printf("%4d %s\n", p->count, p->word);
+	return 0;
+}
+
+```
+
+---
+## Pointers to Structs
+
+```
+
+/* binsearch: find word in tab[0]...tab[n-1] */
+struct key *binsearch(char *word, struck key *tab, int n) {
+	int cond;
+	struct key *low = &tab[0];
+	struct key *high = &tab[n];
+	struct key *mid;
+	while (low < high) {
+		mid = low + (high-low) / 2;
+		if ((cond = strcmp(word, mid->word)) < 0)
+			high = mid;
+		else if (cond > 0)
+			low = mid + 1;
+		else
+			return mid;
+	}
+	return NULL;
+}
+```
+
+
+---
+## Pointers to Structs 
+- Note we return a pointer to a struct key in binsearch (ie if we find it, we return a pointer to it!)
+- NULL else (this is a special macro in C which represents null pointer constant)
+- `mid = low + (high-low) / 2;` we cant do low + high 
+- Our bounds checks have to be careful now since we may point to the wrong spot in memory...
+- The for loop takes care of the sizing in the pointer arithmetic - NOTE THE SIZE ISNT EXACTLY THE SUM OF ITS MEMBERS SIZES! There are 'alignments' which make holes in the struct 
+
+---
+## Self-referential Structs
+- Probably the coolest part of structs, is one of their members can point to themselves...
+- What does that look like? 
+- We can expand on our current example... What if we wanted to count *all words* of some input, not just C keywords? That list is unbounded 
+- One way is to keep track of them as you see them, in alphabetical order 
+- You can do that with a datastructure called a *binary tree*
+
+
+---
+## Trees
+```
+               (date, 3)
+               /      \
+        (banana, 1)     (fig, 10)
+         /      \          \
+(apple, 2)  (cherry, 1)   (grape, 2)
+```
+- Note how words earlier in the alphabet are to the left, vice versa on the right 
+- This is a binary tree
+---
+## Trees
+- This tree will contain one 'node' per distinct word; each node contains
+	- A pointer to the text of the word
+	- A count of the number of occurrences
+	- A pointer to the left child node
+	- A pointer to the right child node
+
+---
+## Trees
+- We build the tree such that a few rules are obeyed - 
+- Any node on the left will always contain a word lexicographically less than the word at the node 
+- Likewise, on the right it will be lexicographically higher than the word
+- Then you could find any word you want easily by starting at the node, and tracing down until you hit it! 
+
+---
+## Trees 
+- Our definition of what the tree node looks like suits very well for structs
+
+```
+struct tnode {             /* the tree node: */
+	char *word;            /* points to the text */
+	int count;             /* number of occurrences */
+	struct tnode *left;    /* left child */
+	struct tnode *right;   /* right child */
+};
+```
+
+---
+## Trees 
+```
+#include <stdio.h>
+#include <ctype.h>
+#include <string.h>
+
+#define MAXWORD 100
+
+struct tnode *addtree(struct tnode *, char *);
+void treeprint(struct tnode *);
+
+int getword(char *, int);
+/* word frequency count */
+int main() {
+	struct tnode *root;
+	char word[MAXWORD];
+	root = NULL;
+	while (getword(word, MAXWORD) != EOF)
+		if (isalpha(word[0]))
+			root = addtree(root, word);
+	treeprint(root);
+	return 0;
+}
+```
+
+---
+## Trees
+```
+struct tnode *talloc(void);
+char *strdup(char *);
+
+/* addtree: add a node with w, at or below p */
+struct treenode *addtree(struct tnode *p, char *w) {
+	int cond;
+	// This is our base case
+	if (p == NULL) {                      /* a new word has arrived */
+		p = talloc();                     /* make a new node */
+		p->word = strdup(w);
+		p->count = 1;
+		p->left = p->right = NULL;
+	} else if ((cond = strcmp(w, p->word)) == 0)
+		p->count++;                       /* repeated word */
+	else if (cond < 0)                    /* less than into left subtree */
+		p->left = addtree(p->left, w);
+	else                                  /* greater than into right subtree */
+		p->right = addtree(p->right, w);
+	return p;
+}
+```
+
+---
+## Trees
+```
+#include <stdlib.h>
+/* talloc: make a tnode */
+struct tnode *talloc(void) {
+	return (struct tnode *) malloc(sizeof(struct tnode));
+}
+
+char *strdup(char *s) /* make a duplicate of s */ {
+	char *p;
+	p = (char *) malloc(strlen(s)+1); /* +1 for '\0' */
+	if (p != NULL)
+		strcpy(p, s);
+	return p;
+}
+```
+
+---
+## Trees 
+```
+/* treeprint: in-order print of tree p */
+void treeprint(struct tnode *p) {
+	if (p != NULL) {
+		treeprint(p->left);
+		printf("%4d %s\n", p->count, p->word);
+		treeprint(p->right);
+	}
+}
+```
+
+---
+## Tables
+- Trees are one extremely useful data structure 
+- Structs help us use another, arguably more useful and interesting data structure -> hash tables
+- Hash tables are how almost everything work efficiently 
+- You can think of them of having 2 main functions we'd need to implement 
+- `install(s, t)` and `lookup(s)` where s and t are `char *`
+- This helps us store 'mappings' of one string to another 
+- We can use it to track items and where they are exactly 
+
+---
+## Tables 
+```
+  id        123       456      789
+              \        |        /
+               \       |       /
+                \      v      /
+                  +-----------+
+                  |  hash()   |
+                  +-----------+
+                   /   |       \
+                  v    v        v
+        +-----------------------------------+
+name    | Alice | - | Bob | - |  - | Charlie |
+	    +-----------------------------------+
+		    |          |                |
+	     +-----+    +-----+           +-----+
+         | ... |    | ... |           | ... |
+         +-----+    +-----+           +-----+
+
+```
+- The hash function points us to the element in an array of pointers... So we dont have to look for it we can find it immediately 
+
+---
+## Tables 
+```
+struct nlist {            /* table entry: */
+	struct nlist *next;   /* next entry in chain */
+	char *name;           /* defined name */
+	char *defn;           /* replacement text */
+};
+```
+
+---
+## Tables 
+```
+#define HASHSIZE 101
+static struct nlist *hashtab[HASHSIZE];
+
+/* hash: form hash value for string s */
+unsigned hash(char *s) {
+	unsigned hashval;
+	for (hashval = 0; *s != '\0'; s++)
+		hashval = *s + 31 * hashval;
+	return hashval % HASHSIZE;
+}
+```
+
+---
+## Tables
+```
+/* lookup: look for s in hashtab */
+struct nlist *lookup(char *s) {
+	// Very common pattern for iterating through linked lists
+	for (struct nlist *np = hashtab[hash(s)]; np != NULL; np = np->next)
+		if (strcmp(s, np->name) == 0)
+			return np;      /* found */
+	return NULL;            /* not found */
+}
+```
+
+---
+## Tables 
+
+```
+struct nlist *lookup(char *);
+char *strdup(char *);
+
+/* install: put (name, defn) in hashtab */
+struct nlist *install(char *name, char *defn) {
+	struct nlist *np;
+	unsigned hashval;
+	if ((np = lookup(name)) == NULL) { /* not found */
+		np = (struct nlist *) malloc(sizeof(*np));
+		if (np == NULL || (np->name = strdup(name)) == NULL)
+			return NULL;
+		hashval = hash(name);
+		np->next = hashtab[hashval];
+		hashtab[hashval] = np;
+	} else /* already there */
+		free((void *) np->defn); /*free previous defn */
+	if ((np->defn = strdup(defn)) == NULL)
+		return NULL;
+	return np;
+}
+```
+
+---
+## Typedef
+- Typedefs are a useful utility in C which we can use to define a new 'type'
+- You've already seen how complicated things can get with pointers, arrays, and structs 
+- `typedef int Length;` This example makes the name `Length` synonymous for `int`
+- `Length len, maxlen;`
+- `Length *lengths[]`
+- `typedef char *String;` similar -> `String p;`
+- Convention is to make typedefs capital to make them standout
+
+---
+## Typedef
+- Lets take our tree node example from earlier 
+
+```
+typedef struct tnode * Treeptr;
+typedef struct tnode {          /* the tree node: */
+	char *word;                 /* points to the text */
+	int count;                  /* number of occurrences */
+	struct tnode *left;         /* left child */
+	struct tnode *right;        /* right child */
+} Treenode;
+```
+
+---
+## Typedef
+- Our eariler `talloc` becomes
+- Note: this is NOT a new type, its an alias if anything
+
+```
+Treeptr talloc(void) {
+	return (Treeptr) malloc(sizeof(Treenode));
+}
+```
+
+---
+## Unions
+- Extra, but unions are also useful! 
+- These are variables that can hold different types at different times, but only one!
+```
+union u_tag {
+	int ival;
+	float fval;
+	char *sval;
+} u;
+```
+- Similar syntax, the variable u can hold either an int, float, or char*. 
+- Same access like structs `.` or `->` for pointer to unions
+</textarea> <script> var slideshow = remark.create(); </script> </body> </html>

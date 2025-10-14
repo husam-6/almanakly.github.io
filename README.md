@@ -35,5 +35,6 @@ Assignments can be worked on in teams of 2, and they are actually encouraged! La
 - [Lesson 4: Loops, Precedence](./lessons/CS102%20Lesson%204%20-%20Bitwise%20Operators,%20Loops,%20Precedence.html)
 - [Lesson 5: Functions Extended, Recursion, Pointers Intro](./lessons/CS102%20Lesson%205%20-%20Functions%20Extended,%20Recursion,%20Pointers%20Intro.html)
 - [Lesson 6: Pointers and Arrays](./lessons/CS102%20Lesson%206%20-%20Pointers%20and%20Arrays.html)
+- [Lesson 7: Structures](./lessons/CS102%20Lesson%207%20-%20Structures.html)
 
 ---
