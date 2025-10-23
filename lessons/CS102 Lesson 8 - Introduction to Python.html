@@ -1,0 +1,521 @@
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Lesson 8 - Introduction to Python</title>
+	<link rel="stylesheet" href="../assets/css/slides.css">
+  <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+
+</head>
+<body>
+
+<textarea id="source">
+## Python 
+
+TB - CH 1
+
+---
+
+## What is Python? 
+- Python is an *interpreted* language, we mentioned this in lecture 1
+- It's bread and butter is how simple yet powerful it is... You can write a really complicated program **really** easily, especially when you compare to C and Assembly 
+- Python is probably the closest to human language a programming language can get 
+
+---
+
+## Python
+- Python is really powerful and its very popular in industry 
+- Ease of use and portability 
+- You don't need a unix system!
+- There are tradeoffs - its interpreted and therefore slower by default 
+- It's actually built on top of C 
+
+---
+
+## Python - Dynamic Typing 
+- Python is dynamically typed
+- What does that mean... Recall in C whenever we declare a variable we had to specify what type it was ahead of time! Compiler could even tell you if you made a mistake since all types are known 
+- In Python, you don't need to specify anything... We will get to this in a later slide 
+
+---
+
+## Python - Libraries 
+- Something else we will talk about - the popularity of Python gives rise to TONS of documentation, written libraries, API's, SDK's etc etc. 
+- Python is so widely used almost anything is easy to do now
+- Libraries are literal code collections people wrote and uploaded for others to use as well, Python has a super easy to use manager called `pip`
+
+---
+
+## Installing Python 
+- You will need to install Python
+- https://www.python.org/downloads/
+- Lookup a tutorial if you need. Most macs will already have a Python version installed 
+- In this class we will use `python3` - make sure you aren't on Python2! 
+- `python --version` or `python3 --version`
+
+---
+
+## Hello World 
+- Just like we did in C, lets do the same thing Python 
+- Print the chars "Hello World" to terminal
+
+```
+print("Hello World")
+```
+
+---
+
+## Hello World
+- Hopefully its clear how easy it is to use... No semicolons! 
+- You can run a `.py` program with `python hello.py`
+- `print` actually works ALOT like the print in C - you can give it multiple args, and theres actually something in Python called F strings which work super similar to `printf`
+- Same concepts with special chars, backslashes etc 
+---
+
+## Python Shell 
+- If you open up a terminal, and type in `python` it will open up a Python shell 
+- You can execute python code here
+- I regularly use a library built on top of this to do quick calculations, graphs, etc (`IPython`)
+
+---
+
+## Tracebacks 
+- When you get an error in Python, you'll see whats called a `Traceback`
+
+```
+primt("Hello World")
+```
+
+```
+Traceback (most recent call last):
+  File "/Users/husam/cs102/almanakly.github.io/test.py", line 1, in <module>
+    primt("hello world")
+NameError: name 'primt' is not defined. Did you mean: 'print'?
+```
+
+---
+
+## Python Basics 
+
+- The good news is everything we learned up until now is transferrable
+- Loops, if statements, even structs have an equivalent (sort of)
+- Lets start with the bare bones - comments are with `#` now instead of `//` in C
+
+---
+
+## Python Basics
+
+```
+# This is a program to show you basics in Python
+# print function
+ 
+print("Game Over")
+input("\n\nPress the enter key to exit.")
+```
+
+---
+
+## Types, Variables 
+
+- I mentioned earlier there are dynamic typing
+- Ie I can have a variable store a string literal then overwrite it with a number later if I want
+- String, `int`, `float`, `str`, `bool`, and a few others which we will get to `list` and `dictionaries` mainly 
+- Strings are straightforward - you can have "regular string" or you could use """ three to have a multi line string 
+```
+"""
+Super long 
+multi long string 
+
+
+
+captured between 
+triple quotes
+"""
+```
+
+---
+
+## Arithmetic 
+- Same as we know in C... basic arithmetic 
+
+```
++------------+-------------------------+-------------+------------------------+
+| Operator   | Description             | Example     | Evaluates To           |
++------------+-------------------------+-------------+------------------------+
+| +          | Addition                | 7 + 3       | 10                     |
+| -          | Subtraction             | 7 - 3       | 4                      |
+| *          | Multiplication          | 7 * 3       | 21                     |
+| /          | Division (True)         | 7 / 3       | 2.3333333333333335     |
+| //         | Division (Integer)      | 7 // 3      | 2                      |
+| %          | Modulus                 | 7 % 3       | 1                      |
++------------+-------------------------+-------------+------------------------+
+```
+
+---
+
+## Variables 
+
+```
+class = "CS102"      # Note strings can actually be used with '' too!
+x = 100
+y = -13
+
+class = x + y // 3
+print(x, y, class)
+```
+
+- Super super simple and straight forward
+- All the same principles still apply... Naming is still important 
+---
+
+## Variables 
+- Strings can be concatenated super easily - `"CS102" + " Section C"`
+
+```
+print("\nThis string " + "may not " + "seem terr" + "ibly impressive. " \
++ "But what " + "you don't know" + " is that\n" + "it's one real" \
++ "l" + "y" + " long string, created from the concatenation " \
++ "of " + "twenty-two\n" + "different strings, broken across " \
++ "six lines." + " Now are you" + " impressed? " + "Okay,\n" \
++ "this " + "one " + "long" + " string is now over!")
+```
+
+---
+
+## Variables
+
+- You can cast variables in Python similar to C 
+
+```
+year = "2025"
+year = int(car)
+```
+
+- Similar would apply for `float`, `str`
+
+---
+
+## Conditionals 
+- Something we haven't explicitly mentioned yet - spacing matters in Python! Not like C at all in that regard
+- This is important now when we talk about blocks and things like conditionals and loops 
+- Again - the good news is all the same logical operators exist in actually a more readable way! 
+
+---
+
+## Conditionals 
+
+```
+# This is a Python library 
+# (you might have to install if you were going to use it)
+import random
+
+# generate random numbers 1 - 6
+die1 = random.randint(1, 6)
+die2 = random.randrange(6) + 1
+total = die1 + die2
+
+print("Total: ", total)
+if total == 7: 
+	print("You rolled a 7!")
+elif total > 7: 
+	print("You rolled a high number!")
+else:
+	print("You rolled a low number!")
+```
+
+---
+
+## Conditionals
+- Note the syntax and the spacing 
+- One indent after the block 
+- if statement consists of `if expression:` colon is important!
+- you can add parenthesis for readability or to enforce order of operations
+- What would multiple ifs look like if they were nested 
+
+---
+
+## Conditionals
+```
+import random
+
+# generate random numbers 1 - 6
+die1 = random.randint(1, 6)
+die2 = random.randrange(6) + 1
+total = die1 + die2
+
+print("Total: ", total)
+if total == 7: 
+	print("You rolled a 7!")
+elif total > 7: 
+	print("You rolled a high number!")
+	if total * 5 > 20:
+		print("4x our roll is greater than 20")
+else:
+	print("You rolled a low number!")
+```
+
+---
+
+## While Loops 
+
+```
+i = 1
+while i < 10: 
+	print(f"this class rocks {i}x")
+	i+=1
+```
+
+---
+
+## While Loops
+
+```
+# Three Year-Old Simulator
+
+print("\t Welcome to the 'Three-Year-Old Simulator'\n")
+print("This program simulates a conversation with a three-year-old child.")
+print("Try to stop the madness.\n")
+
+response = ""
+while response != "Because.":
+    response = input("Why?\n")
+
+print("Oh. Okay.")
+
+input("\n\nPress the enter key to exit.")
+```
+
+---
+
+## For Loops
+- For loops are super similar 
+- Actually simpler in my opinion 
+```
+print("Counting!")
+
+for i in range(10):
+    print(i, end=" ") # end makes print not end in a \n
+
+print("\n\nCounting by fives:")
+for i in range(0, 50, 5):
+    print(i, end=" ")
+
+print("\n\nCounting backwards:")
+for i in range(10, 0, -1):
+    print(i, end=" ")
+```
+
+---
+
+## For Loops
+- `range` is a function and generates a list of numbers from the range provided
+- 0 (default start) to end (non inclusive) in increments of 3rd arg (1 by default)
+
+---
+
+## Strings
+
+- `in` function can check if something is literally in the second operator 
+- Super intuitive when you see an example
+- `len` operator gives you the length of a String
+
+```
+message = input("Enter a message: ")
+print("\nThe length of your message is:", len(message))
+print("\nThe most common letter in the English language, 'e',")
+
+if "e" in message:
+	print("'e' is in your message.")
+else:
+	print("'e' is not in your message.")
+input("\n\nPress the enter key to exit.")
+```
+
+---
+
+## Strings
+
+- You can still iterate through a string like we did in C with char arrays 
+
+```
+string = "Hello world"
+
+for i in range(len(string)):
+	print(string[i])
+```
+
+## Strings
+
+- Another super useful element with indexing and lists (we will talk about these)
+- You can use negative indexes! They wrap around like you may expect...
+
+```
+string = "Hello world"
+print(string[-1])
+```
+
+```
+   0   1   2   3   4
+ +---+---+---+---+---+
+ | i | n | d | e | x |
+ +---+---+---+---+---+
+  -5  -4  -3  -2  -1
+```
+
+---
+
+## Strings
+
+- Another very useful construct - slicing 
+- Note: alot of these will abstract to some of the other types we will learn, ie lists
+- Slicing lets you get the elements in a specific set super easily and neatly 
+
+---
+
+## Strings
+
+```
+word = "pizza"
+print(
+"""
+Slicing 'Cheat Sheet'
+0   1   2   3   4   5
++---+---+---+---+---+
+| p | i | z | z | a |
++---+---+---+---+---+
+-5  -4  -3  -2  -1
+"""
+)
+
+print("Enter the beginning and ending index for your slice of 'pizza'.")
+print("Press the enter key at 'Start' to exit.")
+
+start = None
+while start != "":
+	start = (input("\nStart: "))
+	if start:
+		start = int(start)
+		finish = int(input("Finish: "))
+		print("word[", start, ":", finish, "] is", end=" ")
+		print(word[start:finish])
+input("\n\nPress the enter key to exit.")
+```
+
+---
+
+## None
+- None is like the `NULL` equivalent 
+- It's a special type representing nothing 
+- If you try to use anything with it, you'll get a Traceback 
+
+---
+
+## None
+
+```
+start = None 
+start[0]
+```
+
+---
+
+## Tuples 
+- Tuples are a special type in Python 
+- They are special groupings which can contain any type
+
+```
+# Hero's Inventory
+# Demonstrates tuple creation
+# create an empty tuple
+
+inventory = ()
+# treat the tuple as a condition
+if not inventory:
+	print("You are empty-handed.")
+
+input("\nPress the enter key to continue.")
+```
+
+---
+
+## Tuples 
+
+```
+# create a tuple with some items
+inventory = ("sword",
+			 "armor",
+			 "shield",
+			 "healing potion")
+
+# print the tuple
+print("\nThe tuple inventory is:")
+print(inventory)
+
+# print each element in the tuple
+print("\nYour items:")
+
+for item in inventory:
+	print(item)
+
+input("\n\nPress the enter key to exit.")
+```
+
+---
+
+## Tuples 
+- Tuples are **immutable** - meaning once you make them you cant change it!
+- You can index and you can use index slicing to access elements
+- They will operate largely similar to lists which we will get to 
+- `len` also works 
+
+---
+
+## Word Jumble Game 
+
+```
+# Word Jumble
+#
+# The computer picks a random word and then "jumbles" it
+# The player has to guess the original word
+import random
+
+# create a sequence of words to choose from
+WORDS = ("python", "jumble", "easy", "difficult", "answer", "xylophone")
+
+# pick one word randomly from the sequence
+word = random.choice(WORDS)
+
+# create a variable to use later to see if the guess is correct
+correct = word
+
+# create a jumbled version of the word
+jumble =""
+while word:
+	position = random.randrange(len(word))
+	jumble += word[position]
+	word = word[:position] + word[(position + 1):]
+	
+	
+# start the game
+print(
+	"""
+	Welcome to Word Jumble!
+	Unscramble the letters to make a word.
+	(Press the enter key at the prompt to quit.)
+	"""
+)
+print("The jumble is:", jumble)
+
+guess = input("\nYour guess: ")
+while guess != correct and guess != "":
+	print("Sorry, that's not it.")
+	guess = input("Your guess: ")
+	
+if guess == correct:
+	print("That's it! You guessed it!\n")
+	
+print("Thanks for playing.")
+input("\n\nPress the enter key to exit.")
+```
+
+</textarea> <script> var slideshow = remark.create(); </script> </body> </html>
