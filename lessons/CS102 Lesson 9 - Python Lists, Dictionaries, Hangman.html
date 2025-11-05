@@ -1,0 +1,360 @@
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Lesson 9 - Python Lists, Dictionaries, Hangman</title>
+	<link rel="stylesheet" href="../assets/css/slides.css">
+  <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+
+</head>
+<body>
+
+<textarea id="source">
+## Python Lists, Dictionaries, Hangman
+TB CH 5 - 
+
+---
+
+## Lists and Dictionaries 
+- Probably the most useful types in Python - *lists* and *dictionaries*
+- Tuples are great but they are immutable. You can't change them after creation
+- Lists do everything tuples do + more! You can dynamically add / remove items of any type! 
+- Dictionaries are named pretty well - given some key you can lookup its counterpart
+- Recall the hash table we implemented in C
+
+---
+
+## Lists
+- Lists are sequences like tuples, but they are *mutable*
+- They are denoted with `[]`
+- A pattern you will see often is initializing an empty list and then *adding to it* or *removing from it*
+
+---
+
+## Lists
+
+```
+# create a list with some items and display with a for loop
+inventory = ["sword", "armor", "shield", "healing potion"]
+print("Your items:")
+for item in inventory:
+	print(item)
+input("\nPress the enter key to continue.")
+```
+
+---
+
+## Lists
+- Everything you can do with tuples applies to lists 
+- What if you wanted the size of the list? Use the `len` function!
+
+```
+# get the length of a list
+inventory = ["sword", "armor", "shield", "healing potion"]
+print("You have", len(inventory), "items in your possession.")
+input("\nPress the enter key to continue.")
+```
+
+---
+
+## Lists
+
+- Indexing is identical to what we've seen - use the bracket notation!
+
+```
+index = int(input("\nEnter the index number for an item in inventory: "))
+print("At index", index, "is", inventory[index])
+```
+
+---
+
+## Lists
+
+- The *in* operator is super useful to check if an element is literally in the list 
+
+```
+# test for membership with in
+inventory = ["sword", "armor", "shield", "healing potion"]
+if "healing potion" in inventory:
+	print("You will live to fight another day.")
+```
+
+---
+
+## Lists
+
+- Slicing works the same way as tuples 
+- Super super useful to get parts of the list you are interested in 
+- Powerful libraries like numpy use the same (more or less super similar) patterns
+
+---
+## Lists 
+
+```
+# display a slice
+start = int(input("\nEnter the index number to begin a slice: "))
+finish = int(input("Enter the index number to end the slice: "))
+print("inventory[", start, ":", finish, "] is", end=" ")
+print(inventory[start:finish])
+input("\nPress the enter key to continue.")
+```
+
+---
+
+## Lists
+
+- Manipulating lists and its element is pretty intuitive
+- You can 'add' two lists (which just concatenates things)
+
+```
+chest = ["gold", "gems"]
+print("You find a chest which contains:")
+print(chest)
+print("You add the contents of the chest to your inventory.")
+inventory += chest
+print("Your inventory is now:")
+print(inventory)
+input("\nPress the enter key to continue.")
+```
+
+---
+
+## Lists 
+
+- You can overwrite an existing list element 
+
+```
+# assign by index
+print("You trade your sword for a crossbow.")
+inventory[0] = "crossbow"
+print("Your inventory is now:")
+print(inventory)
+input("\nPress the enter key to continue.")
+```
+
+---
+
+## Lists 
+
+- Deleting and adding list elements is also super portable 
+- Be wary of this though, its inefficient because when you remove something in the middle, you need to shift everything over
+
+```
+# delete an element
+print("In a great battle, your shield is destroyed.")
+del inventory[2]
+print("Your inventory is now:")
+print(inventory)
+input("\nPress the enter key to continue.")
+```
+
+---
+
+## Lists 
+
+- Appending a value is one of the most common patterns I use with lists 
+- If you couldn't tell already, lists are like arrays (from C) older but slower brother
+
+```
+counts = []
+for i in range(0, 100):
+	counts.append(f"NUMBER{i}")
+```
+
+---
+
+## Lists
+
+- An interesting feature is that you can nest lists 
+- This is a multi dimensional array in a way, but not exactly 
+
+```
+grid = [[1, 2, 3], [4, 5], [6]]
+grid[1][0]
+```
+
+---
+## Dictionaries 
+- Now we move on to the other most powerful type in Python 
+- Lists were useful when you had a *sequence* of items you need to organize
+- What if you had data which really comes in pairs? And you need quick lookups? 
+- Dictionaries work with *key value* pairs 
+
+---
+
+## Dictionaries 
+
+```
+# Geek Translator
+# Demonstrates using dictionaries
+geek = {
+	"404": "clueless. From the web error message 404, meaning page not found.",
+	"Googling": "searching the Internet for background information on a person.",
+	"Keyboard Plaque" : "the collection of debris found in computer keyboards.",
+	"Link Rot" : "the process by which web page links become obsolete.",
+	"Percussive Maintenance" : "the act of striking an electronic device to make it work.",
+	"Uninstalled" : "being fired. Especially popular during the dot-bomb era."
+}
+```
+
+---
+
+## Dictionaries 
+
+- Another super useful use case is storing counts. We talked about this in C when we introduced structs 
+- Say we wanted to count all the occurrences of a letter in a sentence 
+
+```
+# Fancy example
+sentence = "CS102 is my favorite class and I would take it maybe 6 or 7 times"
+counts = {}
+for letter in sentence: 
+	if letter in counts:
+		counts[letter] = counts[letter] + 1
+	else: 
+		counts[letter] = 1
+```
+
+---
+## Dictionaries 
+
+- You can access dictionary elements using `get` method or with `[]` notation
+- You need to give the key to fetch the value 
+- `get` has the benefit of allowing you to default a value 
+- You can also efficiently check if our key is already in the set
+
+---
+
+## Dictionaries 
+
+```
+# Fancy example
+sentence = "CS102 is my favorite class and I would take it maybe 6 or 7 times"
+counts = {}
+for letter in sentence: 
+	counts[letter] = counts.get(letter, 0) + 1
+```
+
+---
+
+## A Note on References
+
+- We haven't gotten to functions yet, but introducing lists and dictionaries warrants the discussion 
+- For mutable variables like lists, dictionaries, strings - Python stores a reference to that variable.
+
+```
+                +-----------+
+language ────►  | "Python"  |
+                +-----------+
+```
+
+---
+
+## A Note on References
+
+```
+# SHALLOW COPY!
+mike = ["khakis", "dress shirt", "jacket"]
+mr_dawson = mike
+honey = mike
+```
+
+
+---
+
+## A Note on References
+
+```
+mike  ─┐
+       │
+mr_dawson ───► ["khakis", "dress shirt", "jacket"]
+       │
+honey ─┘
+```
+
+---
+
+## Hangman
+
+- We are going to write a program for hangman using lists and dictionaries
+
+```
+HANGMAN = (
+    """
+    ------
+    |     |
+    |
+    |
+    |
+    |
+    |
+    |
+    ----------
+    """,
+    """
+    ------
+    |     |
+    |     O
+    |
+    |
+    |
+    |
+    |
+    ----------
+    """,
+    # ... and so on ...
+)
+```
+
+---
+
+## Hangman
+
+```
+MAX_WRONG = len(HANGMAN) + 1
+WORDS = ("BRUH", "CHAT", "TYPE", "IS BRO FR", "PYTHON")
+
+# initialize variables
+word = random.choice(WORDS)
+so_far = "-" * len(word) # one dash for each letter in word to be guessed
+wrong = 0 
+used = []
+
+print("Welcome to Hangman. Good luck!")
+```
+
+---
+
+## Hangman
+
+```
+while wrong < MAX_WRONG and so_far != word:
+	print(HANGMAN[wrong])
+	print("\nYou've used the following letters:\n", used)
+	print("\nSo far, the word is:\n", so_far)
+	
+	guess = input("\n\nEnter your guess: ")
+	guess = guess.upper()
+	while guess in used:
+		print("You've already guessed the letter", guess)
+		guess = input("Enter your guess: ")
+		guess = guess.upper()
+	used.append(guess)
+	
+	if guess in word:
+		print(f"Yes! '{guess}' is in the word!")
+
+		new_word = ""
+		for i, letter in enumerate(word): 
+			if word[i] == guess: 
+				new_word += guess
+			else:
+				new_word += so_far[i]
+		so_far = new_word
+	else:
+		print("\nSorry,", guess, "isn't in the word.")
+		wrong += 1
+
+print(f"The word was {word}")
+```
+</textarea> <script> var slideshow = remark.create(); </script> </body> </html>

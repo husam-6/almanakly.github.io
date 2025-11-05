@@ -37,5 +37,7 @@ Assignments can be worked on in teams of 2, and they are actually encouraged! La
 - [Lesson 6: Pointers and Arrays](./lessons/CS102%20Lesson%206%20-%20Pointers%20and%20Arrays.html)
 - [Lesson 7: Structures](./lessons/CS102%20Lesson%207%20-%20Structures.html)
 - [Lesson 8: Intro to Python](./lessons/CS102%20Lesson%208%20-%20Introduction%20to%20Python.html)
+- [Lesson 9: Python Lists, Dictionaries, Hangman](./lessons/CS102%20Lesson%209%20-%20Python%20Lists,%20Dictionaries,%20Hangman.html)
+
 
 ---
