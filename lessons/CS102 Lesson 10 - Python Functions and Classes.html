@@ -1,0 +1,599 @@
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Lesson 10 - Python Functions and Classes</title>
+	<link rel="stylesheet" href="../assets/css/slides.css">
+  <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+  <style>
+    /* Make code blocks scrollable with always-visible scrollbar */
+    .remark-slide-content pre {
+      max-height: 400px;
+      overflow-y: scroll !important;
+      position: relative;
+      padding-right: 50px; /* Make room for copy button */
+    }
+
+    /* Force scrollbar to always show */
+    .remark-slide-content pre::-webkit-scrollbar {
+      width: 12px;
+      -webkit-appearance: none;
+    }
+
+    .remark-slide-content pre::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+
+    .remark-slide-content pre::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 10px;
+    }
+
+    .remark-slide-content pre::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+
+    /* Copy button styling */
+    .copy-button {
+      position: absolute;
+      top: 8px;
+      right: 20px;
+      padding: 8px;
+      background: rgba(255, 255, 255, 0.9);
+      color: #333;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      z-index: 100;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: all 0.2s;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .copy-button:hover {
+      background: rgba(255, 255, 255, 1);
+      border-color: #999;
+    }
+
+    .copy-button.copied {
+      background: #4CAF50;
+      color: white;
+      border-color: #4CAF50;
+    }
+
+    /* Container for code blocks needs relative positioning */
+    .remark-slide-content {
+      position: relative;
+    }
+  </style>
+
+</head>
+<body>
+
+<textarea id="source">
+## Python Functions and Classes
+
+CH 6, CH 8
+
+---
+
+## Functions
+
+- Good news again - functions are even simpler than you can remember in C... 
+- Syntax is super easy to follow 
+- Note the snake_case which is typically convention in Python
+- Function parameters don't need the typing
+
+```
+def function_name(a: int, b: int):
+	return a + b
+```
+
+
+---
+
+## Functions
+
+
+```
+def function_name(a, b):
+	return a + b
+```
+
+---
+
+## Functions
+
+```
+def instructions():
+	"""Display game instructions."""
+	print(
+	"""
+	Welcome to the greatest intellectual challenge of all time: Tic-Tac-Toe.
+	This will be a showdown between your human brain and my silicon processor.
+	You will make your move known by entering a number, 0 - 8. The number
+	will correspond to the board position as illustrated:
+	0 | 1 | 2
+	---------
+	3 | 4 | 5
+	---------
+	6 | 7 | 8
+	Prepare yourself, human. The ultimate battle is about to begin. \n
+	"""
+	)	
+```
+
+
+---
+
+## Functions
+
+```
+# main
+print("Here are the instructions to the Tic-Tac-Toe game:")
+instructions()
+print("Here they are again:")
+instructions()
+print("You probably understand the game by now.")
+input("\n\nPress the enter key to exit.")
+```
+
+---
+
+## Functions
+- The `def` syntax specifies that we are defining a function 
+- Paranthesis and their contents specify the params 
+- colon followed by indent block is the body 
+- Common practice to use """ multi line doc string to describe the function
+
+---
+
+## Functions
+
+```
+def pow(x: int, y: int):
+	"""
+	Calculate exponent of x^y
+	"""
+	result = 1
+	for _ in range(y):
+		result *= x
+	return result
+```
+
+---
+
+## Functions
+
+- Something else neat about functions in Python is they can nest...
+- I see this pattern alot when we deal with concurrency - dont worry about that yet 
+
+---
+
+## Functions
+
+```
+def calculate_mean_in_batches(items: list, batch_size: int):
+	"""
+	Process list in batches - calculate mean of each batch
+	"""
+	
+	def process_batch(batch: list):
+		"""
+		Process a single batch - calculate mean and return
+		"""
+		return sum(batch) / len(batch)
+			
+	
+	for i in range(0, len(items), batch_size):
+		print(f"Batch {i} has mean: {process_batch(items[i:i+batch_size])}")
+		
+calculate_mean_in_batches([1, 1, 3, 4, 10, 30], 2)
+```
+
+
+---
+
+## Functions - Params
+
+- Something useful with Python functions is you can default some params and also specify them in the caller (instead of positionally calling)
+- Let me give an example 
+
+---
+
+## Functions - Params
+
+```
+# NOTICE HOW I SPECIFIED BATCH_SIZE = 2 AS DEFAULT
+def calculate_mean_in_batches(items: list, batch_size: int = 2):
+	"""
+	Process list in batches - calculate mean of each batch
+	"""
+	
+	def process_batch(batch: list):
+		"""
+		Process a single batch - calculate mean and return
+		"""
+		return sum(batch) / len(batch)
+			
+	
+	for i in range(0, len(items), batch_size):
+		print(f"Batch {i} has mean: {process_batch(items[i:i+batch_size])}")
+		
+
+calculate_mean_in_batches([1, 1, 3, 4, 10, 30])
+calculate_mean_in_batches([1, 1, 3, 4, 10, 30], batch_size=3)
+```
+
+---
+
+## Functions - Params 
+
+- Specifying the param by name can be super readable 
+- Also helps when you have a long function and you don't want to switch the order in the caller 
+
+```
+def add_and_multiply(a, b, multiple):
+	return (a + b) * multiple
+
+add_and_multiply(
+	multiple=10,
+	a=3,
+	b=10
+)
+```
+
+
+---
+
+## Functions - args 
+
+```
+def find_sum(*args):
+    result = 0
+    
+    for num in args:
+        result = result + num
+    
+    print("Sum = ", result)
+
+# function call with 3 arguments
+find_sum(1, 2, 3)
+
+# function call with 2 arguments
+find_sum(4, 9)
+```
+
+
+---
+
+## Functions - kwargs
+
+- kwargs is what you can use for variable length keyword arguments 
+- Passes as a dictionary so we can use all our previous learnings
+
+---
+
+## Functions - kwargs
+```
+def intro(**data):
+    print("\nData type of argument:",type(data))
+
+    for key, value in data.items():
+        print("{} is {}".format(key,value))
+
+intro(Firstname="Sita", Lastname="Sharma", Age=22, Phone=1234567890)
+intro(Firstname="John", Lastname="Wood", Email="johnwood@nomail.com", Country="Wakanda", Age=25, Phone=9876543210)
+```
+
+
+---
+
+## Classes 
+- Classes are blueprints for *objects* to be used by your program 
+- They are similar to structs except you can have **methods** in addition to member variables 
+- They essentially become a type
+- Lets look at an example
+
+
+---
+
+## Classes
+
+```
+class Critter(object):
+	"""A virtual pet"""
+	def talk(self):
+		print("Hi. I'm an instance of class Critter.")
+
+# main
+crit = Critter()
+crit.talk()
+input("\n\nPress the enter key to exit.")
+```
+
+
+---
+
+## Classes 
+- `class` keyword specifies that we are defining a class 
+- The paranthesis is used for **inheritence** 
+- This is a huge concept in object oriented programming, we will introduce it in this class with an example 
+
+---
+
+## Classes
+
+```
+class Animal():
+	# THIS IS CALLED THE CONSTRUCTOR
+	# INSTRUCTIONS TO CREATE YOUR CLASS
+	def __init__(self, species: str, color_fur: str):
+		self.species = species
+		self.color_fur = color_fur
+
+	def talk(self):
+		print(f"I am a {self.species} with {self.color_fur} fur!")
+
+
+class Dog(Animal):
+	"""A virtual pet"""
+	def __init__(self, breed: str, color_fur: str):
+		super().__init__(species="Dog", color_fur=color_fur)
+		self.breed = breed
+
+	def fetch(self):
+		# Dog-specific behavior
+		print(f"The {self.breed} is fetching the ball!")
+```
+
+---
+
+## Classes 
+
+```
+class Cat(Animal):
+	"""A virtual pet cat"""
+	def __init__(self, color_fur: str, indoor: bool = True):
+		super().__init__(species="Cat", color_fur=color_fur)
+		self.indoor = indoor
+
+	def scratch(self):
+          print("The cat is scratching the furniture!")		
+
+
+# This is how we instantiate the objects
+dog = Dog(breed="Golden Retriever", color_fur="golden")
+dog.talk()
+dog.fetch()
+
+cat = Cat(color_fur="black", indoor=True)
+cat.talk()
+cat.scratch()
+```
+
+---
+
+## Classes 
+- We will go over more examples of inheritence and *polymorphism* next week
+- This example is nice to show many aspects of a class though
+- You have the concept of **encapsulation** - huge principle in object oriented programming 
+- Simplifying and consolidating functionality into an object / interface 
+- User just plays with the object to call the various functions and keep track of variables 
+
+---
+
+## Classes 
+- The member variables we defined can be directly accessed with `.` dot notation (similar to structs)
+- This is discouraged though, and we will discuss more next week during Object Oriented Programming
+- There are proper ways to access which are usually encouraged more than below 
+
+```
+dog = Dog(breed="Golden Retriever", color_fur="golden")
+print(dog.breed)
+
+cat = Cat(color_fur="black", indoor=True)
+print(cat.breed)
+```
+
+---
+
+## Classes 
+
+- If you try to print a class you may get something like 
+
+```
+<__main__.Cat at 0x10ef5ab60>
+```
+
+---
+
+## Classes 
+
+- If you want a descriptive message you can define the `__str__` method 
+
+```
+class Cat(Animal):
+	"""A virtual pet cat"""
+	def __init__(self, color_fur: str, indoor: bool = True):
+		super().__init__(species="Cat", color_fur=color_fur)
+		self.indoor = indoor
+
+	def scratch(self):
+          print("The cat is scratching the furniture!")		
+	
+	def __str__(self):
+		return f"Cat(species={self.species}, color_fur={self.color_fur}, indoor={self.indoor})"
+		
+
+cat = Cat(color_fur="black", indoor=True)
+print(cat)
+```
+
+
+---
+
+## Classes 
+
+- Critter caretaker game from Textbook
+
+```
+# Critter Caretaker
+# A virtual pet to care for
+class Critter(object):
+	"""A virtual pet"""
+	def __init__(self, name, hunger = 0, boredom = 0):
+		self.name = name
+		self.hunger = hunger
+		self.boredom = boredom
+	
+	def __pass_time(self):
+		self.hunger += 1
+		self.boredom += 1
+		
+		
+	@property
+	def mood(self):
+		unhappiness = self.hunger + self.boredom
+		if unhappiness < 5:
+			m = "happy"
+		elif 5 <= unhappiness <= 10:
+			m = "okay"
+		elif 11 <= unhappiness <= 15:
+			m = "frustrated"
+		else:
+			m = "mad"
+		return m
+
+	def talk(self):
+		# NOTE: mood is calculated via the defined method on the fly!
+		print("I'm", self.name, "and I feel", self.mood, "now.\n")
+		print(f"Hunger = {self.hunger}, boredom = {self.boredom}")
+		self.__pass_time()
+		
+	def eat(self, food = 4):
+		print("Brruppp. Thank you.")
+		self.hunger -= food
+		if self.hunger < 0:
+			self.hunger = 0
+		self.__pass_time()
+
+	def play(self, fun = 4):
+		print("Wheee!")
+		self.boredom -= fun
+		if self.boredom < 0:
+			self.boredom = 0
+		self.__pass_time()
+```
+
+
+---
+
+## Classes
+
+```
+def main():
+	crit_name = input("What do you want to name your critter?: ")
+	crit = Critter(crit_name)
+	
+	choice = None
+	while choice != "0":
+		print \
+		("""
+		Critter Caretaker
+		0 - Quit
+		1 - Listen to your critter
+		2 - Feed your critter
+		3 - Play with your critter
+		""")
+
+		choice = input("Choice: ")
+		print()
+
+		# exit
+		if choice == "0":
+			print("Good-bye.")
+
+		# listen to your critter
+		elif choice == "1":
+			crit.talk()
+
+		# feed your critter
+		elif choice == "2":
+			crit.eat()
+
+		# play with your critter
+		elif choice == "3":
+			crit.play()
+
+		# some unknown choice
+		else:
+			print("\nSorry, but", choice, "isn't a valid choice.")
+```
+</textarea>
+<script>
+  // Create slideshow with scroll navigation disabled
+  var slideshow = remark.create({
+    navigation: {
+      scroll: false  // Disable scroll to change slides
+    }
+  });
+
+  // Add copy buttons to code blocks after slides are created
+  slideshow.on('afterShowSlide', function (slide) {
+    addCopyButtons();
+  });
+
+  function addCopyButtons() {
+    // Target the pre elements that contain code
+    const codeBlocks = document.querySelectorAll('.remark-slide-content pre');
+
+    codeBlocks.forEach(function(pre) {
+      // Check if button already exists
+      if (pre.querySelector('.copy-button')) {
+        return;
+      }
+
+      const button = document.createElement('button');
+      button.className = 'copy-button';
+      button.innerHTML = '📋'; // Copy icon
+      button.title = 'Copy code';
+
+      button.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const code = pre.querySelector('code');
+        const text = code ? code.innerText : pre.innerText;
+
+        navigator.clipboard.writeText(text).then(function() {
+          button.innerHTML = '✓';
+          button.classList.add('copied');
+
+          setTimeout(function() {
+            button.innerHTML = '📋';
+            button.classList.remove('copied');
+          }, 2000);
+        }).catch(function(err) {
+          console.error('Failed to copy:', err);
+          button.innerHTML = '✗';
+          setTimeout(function() {
+            button.innerHTML = '📋';
+          }, 2000);
+        });
+      });
+
+      pre.style.position = 'relative';
+      pre.appendChild(button);
+    });
+  }
+
+  // Initial call with longer delay to ensure slides are loaded
+  setTimeout(addCopyButtons, 500);
+</script>
+</body>
+</html>

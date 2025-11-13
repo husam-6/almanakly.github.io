@@ -5,6 +5,73 @@
   <title>Lesson 7 - Structures</title>
 	<link rel="stylesheet" href="../assets/css/slides.css">
   <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+  <style>
+    /* Make code blocks scrollable with always-visible scrollbar */
+    .remark-slide-content pre {
+      max-height: 400px;
+      overflow-y: scroll !important;
+      position: relative;
+      padding-right: 50px; /* Make room for copy button */
+    }
+
+    /* Force scrollbar to always show */
+    .remark-slide-content pre::-webkit-scrollbar {
+      width: 12px;
+      -webkit-appearance: none;
+    }
+
+    .remark-slide-content pre::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+
+    .remark-slide-content pre::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 10px;
+    }
+
+    .remark-slide-content pre::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+
+    /* Copy button styling */
+    .copy-button {
+      position: absolute;
+      top: 8px;
+      right: 20px;
+      padding: 8px;
+      background: rgba(255, 255, 255, 0.9);
+      color: #333;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      z-index: 100;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: all 0.2s;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .copy-button:hover {
+      background: rgba(255, 255, 255, 1);
+      border-color: #999;
+    }
+
+    .copy-button.copied {
+      background: #4CAF50;
+      color: white;
+      border-color: #4CAF50;
+    }
+
+    /* Container for code blocks needs relative positioning */
+    .remark-slide-content {
+      position: relative;
+    }
+  </style>
 
 </head>
 <body>
@@ -803,4 +870,64 @@ union u_tag {
 ```
 - Similar syntax, the variable u can hold either an int, float, or char*. 
 - Same access like structs `.` or `->` for pointer to unions
-</textarea> <script> var slideshow = remark.create(); </script> </body> </html>
+</textarea>
+<script>
+  // Create slideshow with scroll navigation disabled
+  var slideshow = remark.create({
+    navigation: {
+      scroll: false  // Disable scroll to change slides
+    }
+  });
+
+  // Add copy buttons to code blocks after slides are created
+  slideshow.on('afterShowSlide', function (slide) {
+    addCopyButtons();
+  });
+
+  function addCopyButtons() {
+    // Target the pre elements that contain code
+    const codeBlocks = document.querySelectorAll('.remark-slide-content pre');
+
+    codeBlocks.forEach(function(pre) {
+      // Check if button already exists
+      if (pre.querySelector('.copy-button')) {
+        return;
+      }
+
+      const button = document.createElement('button');
+      button.className = 'copy-button';
+      button.innerHTML = '📋'; // Copy icon
+      button.title = 'Copy code';
+
+      button.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const code = pre.querySelector('code');
+        const text = code ? code.innerText : pre.innerText;
+
+        navigator.clipboard.writeText(text).then(function() {
+          button.innerHTML = '✓';
+          button.classList.add('copied');
+
+          setTimeout(function() {
+            button.innerHTML = '📋';
+            button.classList.remove('copied');
+          }, 2000);
+        }).catch(function(err) {
+          console.error('Failed to copy:', err);
+          button.innerHTML = '✗';
+          setTimeout(function() {
+            button.innerHTML = '📋';
+          }, 2000);
+        });
+      });
+
+      pre.style.position = 'relative';
+      pre.appendChild(button);
+    });
+  }
+
+  // Initial call with longer delay to ensure slides are loaded
+  setTimeout(addCopyButtons, 500);
+</script>
+</body>
+</html>
