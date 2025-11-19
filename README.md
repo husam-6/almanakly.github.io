@@ -39,6 +39,7 @@ Assignments can be worked on in teams of 2, and they are actually encouraged! La
 - [Lesson 8: Intro to Python](./lessons/CS102%20Lesson%208%20-%20Introduction%20to%20Python.html)
 - [Lesson 9: Python Lists, Dictionaries, Hangman](./lessons/CS102%20Lesson%209%20-%20Python%20Lists,%20Dictionaries,%20Hangman.html)
 - [Lesson 10: Python Functions and Classes](./lessons/CS102%20Lesson%2010%20-%20Python%20Functions%20and%20Classes.html)
+- [Lesson 11: Python Object Oriented Programming](./lessons/CS102%20Lesson%2011%20-%20Object%20Oriented%20Programming.html)
 
 
 ---

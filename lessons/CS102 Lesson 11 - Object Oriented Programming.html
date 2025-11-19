@@ -1,0 +1,856 @@
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Lesson 11 - Object Oriented Programming</title>
+	<link rel="stylesheet" href="../assets/css/slides.css">
+  <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+  <style>
+    /* Make code blocks scrollable with always-visible scrollbar */
+    .remark-slide-content pre {
+      max-height: 400px;
+      overflow-y: scroll !important;
+      position: relative;
+      padding-right: 50px; /* Make room for copy button */
+    }
+
+    /* Force scrollbar to always show */
+    .remark-slide-content pre::-webkit-scrollbar {
+      width: 12px;
+      -webkit-appearance: none;
+    }
+
+    .remark-slide-content pre::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+
+    .remark-slide-content pre::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 10px;
+    }
+
+    .remark-slide-content pre::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+
+    /* Copy button styling */
+    .copy-button {
+      position: absolute;
+      top: 8px;
+      right: 20px;
+      padding: 8px;
+      background: rgba(255, 255, 255, 0.9);
+      color: #333;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      z-index: 100;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: all 0.2s;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .copy-button:hover {
+      background: rgba(255, 255, 255, 1);
+      border-color: #999;
+    }
+
+    .copy-button.copied {
+      background: #4CAF50;
+      color: white;
+      border-color: #4CAF50;
+    }
+
+    /* Container for code blocks needs relative positioning */
+    .remark-slide-content {
+      position: relative;
+    }
+  </style>
+
+</head>
+<body>
+
+<textarea id="source">
+## Object Oriented Programming
+
+CH 9 
+
+---
+
+## Object Oriented Programming
+
+- OOP is a super powerful paradigm in software - Abstraction!
+- You use objects in conjunction with each other, each with a dedicated role 
+- You basically program very declaratively, each object will encapsulate functionality and data and hide it from the rest of the program 
+
+---
+
+## Abstraction 
+
+- We've mentioned many times how much cleaner and more maintainable your code is when you abstract logic 
+- This was mostly in discussion with functions 
+- Classes and objects are a step on top of this
+
+---
+
+## Abstraction 
+
+- Best explained with an example
+- What if we wanted to create a card game program? 
+- We could create a card class 
+
+---
+
+## Cards
+
+```
+class Card(object):
+	""" A playing card. """
+	RANKS = ["A", "2", "3", "4", "5", "6", "7", 
+			 "8", "9", "10", "J", "Q", "K"]
+	SUITS = ["c", "d", "h", "s"]
+
+	def __init__(self, rank, suit):
+		self.rank = rank
+		self.suit = suit
+	
+	def __str__(self):
+		return self.rank + self.suit
+```
+
+---
+## Hand
+
+```
+class Hand(object):
+	""" A hand of playing cards. """
+	def __init__(self):
+		self.cards = []     # WE WILL STORE A LIST OF OUR CARD CLASS
+	
+	def __str__(self):
+		if self.cards:
+			rep = ""
+			for card in self.cards:
+				rep += str(card) + " "
+		else:
+			rep = "<empty>"
+		return rep
+	
+	def clear(self):
+		self.cards = []
+	
+	def add(self, card):
+		self.cards.append(card)
+	
+	def give(self, card, other_hand):
+		self.cards.remove(card)
+		other_hand.add(card)
+```
+
+
+---
+
+## Mini Demo
+
+- Lets take a look at an example using these classes as a reminder on what classes are 
+- This is a good example of dividing the functionality into abstract levels 
+
+---
+
+## Mini Demo
+
+```
+# main
+card1 = Card(rank = "A", suit = "c")
+print("Printing a Card object:")
+print(card1)
+card2 = Card(rank = "2", suit = "c")
+card3 = Card(rank = "3", suit = "c")
+card4 = Card(rank = "4", suit = "c")
+card5 = Card(rank = "5", suit = "c")
+print("\nPrinting the rest of the objects individually:")
+print(card2)
+print(card3)
+print(card4)
+print(card5)
+```
+
+---
+
+## Mini Demo
+
+```
+my_hand = Hand()
+print("\nPrinting my hand before I add any cards:")
+print(my_hand)
+```
+
+
+---
+## Mini Demo
+
+```
+my_hand.add(card1)
+my_hand.add(card2)
+my_hand.add(card3)
+my_hand.add(card4)
+my_hand.add(card5)
+print("\nPrinting my hand after adding 5 cards:")
+print(my_hand)
+```
+
+---
+
+## Mini Demo 
+
+```
+my_hand.clear()
+print("\nMy hand after clearing it:")
+print(my_hand)
+```
+
+---
+
+## Inheritance
+
+- We went over the general concept of inheritence with the Animal / Dog / Cat example 
+- This is very useful and a key part of object oriented programming as it lets you abstract shared logic 
+- Maybe we need a `Hand` class and also a `BlackJackHand` or `PokerHand`
+- Will have similar logic but different! Avoid cut and paste...
+
+---
+
+## Inheritance
+
+```
+class Deck(Hand):
+	""" A deck of playing cards. """
+	def populate(self):
+		for suit in Card.SUITS:
+			for rank in Card.RANKS:
+				self.add(Card(rank, suit))
+		
+	def shuffle(self):
+		import random
+		random.shuffle(self.cards)
+	
+	def deal(self, hands, per_hand = 1):
+		for rounds in range(per_hand):
+			for hand in hands:
+				if self.cards:
+					top_card = self.cards[0]
+					self.give(top_card, hand)
+				else:
+					print("Can't continue deal. Out of cards!")
+```
+
+---
+
+## Inheritance 
+
+- Note - Deck inherits all the logic of a the Hand class 
+- It will have a set of cards, an add method, a clear method etc 
+- See next example - we never defined `__str__` but it was inherited from the parent class
+
+---
+
+## Inheritance
+
+```
+deck1 = Deck()
+print("Created a new deck.")
+print("Deck:")
+print(deck1)
+```
+
+```
+deck1.populate()
+print("\nPopulated the deck.")
+print("Deck:")
+print(deck1)
+```
+
+---
+
+## Inheritance
+
+```
+deck1.shuffle()
+print("\nShuffled the deck.")
+print("Deck:")
+print(deck1)
+```
+
+---
+
+## Inheritance
+
+```
+deck1.deal(hands, per_hand = 5)
+print("\nDealt 5 cards to my hand and your hand.")
+print("My hand:")
+print(my_hand)
+print("Your hand:")
+print(your_hand)
+print("Deck:")
+print(deck1)
+```
+
+---
+
+## Inheritance
+
+```
+deck1.clear()
+print("\nCleared the deck.")
+print("Deck:", deck1)
+```
+
+---
+
+## Inheritance
+
+- What if we wanted to *override* a method? 
+- We can! You can specify what you want in the child class 
+- You can also leverage parent class functionality with `super()` keyword - this invokes the parent method. We saw a similar example with our Animal classes
+
+---
+
+## Inheritance
+
+```
+class Unprintable_Card(Card):
+	""" A Card that won't reveal its rank or suit when printed. """
+	def __str__(self):
+		return "<unprintable>"
+```
+
+---
+
+## Inheritance
+
+```
+class Positionable_Card(Card):
+	""" A Card that can be face up or face down. """
+	def __init__(self, rank, suit, face_up = True):
+		super(Positionable_Card, self).__init__(rank, suit)
+		self.is_face_up = face_up
+	
+	def __str__(self):
+		if self.is_face_up:
+			rep = super(Positionable_Card, self).__str__()
+		else:
+			rep = "XX"
+		return rep
+
+	def flip(self):
+		self.is_face_up = not self.is_face_up
+```
+
+
+---
+
+## Mini Demo pt2
+
+```
+card1 = Card("A", "c")
+card2 = Unprintable_Card("A", "d")
+card3 = Positionable_Card("A", "h")
+```
+
+---
+## Mini Demo pt2
+
+```
+print("Printing a Card object:")
+print(card1)
+```
+
+---
+
+## Mini Demo pt2 
+
+```
+print("\nPrinting an Unprintable_Card object:")
+print(card2)
+```
+
+---
+
+## Mini Demo pt2
+
+```
+print("\nPrinting a Positionable_Card object:")
+print(card3)
+```
+
+
+---
+
+## Mini Demo pt2
+
+```
+print("Flipping the Positionable_Card object.")
+card3.flip()
+print("Printing the Positionable_Card object:")
+print(card3)
+```
+
+---
+## Polymorphism
+
+- A *HUGE* concept in OOP 
+- Arguably the hardest to wrap your head around 
+- Polymoprhism is basically the quality that you can use different things the same way and they will work accordingly 
+- An example of this was in our `Unprintable_Card` where we used the `__str__` method WE defined 
+- At runtime / when we execute our code, Python interpreter basically figures out which method to use
+
+---
+
+## Mini Demo pt2
+
+
+```
+# Games
+# Demonstrates module creation
+class Player(object):
+	""" A player for a game. """
+	def __init__(self, name, score = 0):
+		self.name = name
+		self.score = score
+	
+	def __str__(self):
+		return self.name + ":\t" + str(self.score)
+
+	def ask_yes_no(question):
+		"""Ask a yes or no question."""
+		response = None
+		while response not in ("y", "n"):
+			response = input(question).lower()
+		return response
+	
+	def ask_number(question, low, high):
+		"""Ask for a number within a range."""
+		response = None
+		while response not in range(low, high):
+			response = int(input(question))
+		return response
+	
+if __name__ == "__main__":
+	print("You ran this module directly (and did not 'import' it).")
+```
+
+---
+
+## Mini Demo pt2
+
+```
+import games, random
+print("Welcome to the world's simplest game!\n")
+again = None
+while again != "n":
+	players = []
+num = games.ask_number(question = "How many players? (2 - 5): ", low = 2, high = 5)
+```
+
+---
+
+## Mini Demo pt2
+
+```
+for i in range(num):
+	name = input("Player name: ")
+	score = random.randrange(100) + 1
+	player = games.Player(name, score)
+	players.append(player)
+```
+
+---
+
+## Mini Demo pt2
+
+```
+print("\nHere are the game results:")
+for player in players:
+print(player)
+```
+
+---
+
+## Mini Demo pt2
+
+```
+again = games.ask_yes_no("\nDo you want to play again? (y/n): ")
+```
+
+---
+
+## Blackjack
+
+- Lets put all our card classes in a module 
+
+```
+import random
+
+# Cards Module
+# Basic classes for a game with playing cards
+class Card(object):
+	""" A playing card. """
+	RANKS = ["A", "2", "3", "4", "5", "6", "7",
+			 "8", "9", "10", "J", "Q", "K"]
+	SUITS = ["c", "d", "h", "s"]
+	def __init__(self, rank, suit, face_up = True):
+		self.rank = rank
+		self.suit = suit
+		self.is_face_up = face_up
+
+	def __str__(self):
+		if self.is_face_up:
+			rep = self.rank + self.suit
+		else:
+			rep = "XX"
+		return rep
+
+	def flip(self):
+		self.is_face_up = not self.is_face_up
+
+class Hand(object):
+	""" A hand of playing cards. """
+	def __init__(self):
+		self.cards = []
+	
+	def __str__(self):
+		if self.cards:
+			rep = ""
+			for card in self.cards:
+				rep += str(card) + "\t"
+		else:
+			rep = "<empty>"
+		return rep
+
+	def clear(self):
+		self.cards = []
+	
+	def add(self, card):
+		self.cards.append(card)
+	
+	def give(self, card, other_hand):
+		self.cards.remove(card)
+		other_hand.add(card)
+
+
+class Deck(Hand):
+	""" A deck of playing cards. """
+	def populate(self):
+		for suit in Card.SUITS:
+			for rank in Card.RANKS:
+				self.add(Card(rank, suit))
+	
+	def shuffle(self):
+		random.shuffle(self.cards)
+	
+	def deal(self, hands, per_hand = 1):
+		for rounds in range(per_hand):
+			for hand in hands:
+				if self.cards:
+					top_card = self.cards[0]
+					self.give(top_card, hand)
+				else:
+					print("Can't continue deal. Out of cards!")
+
+if __name__ == "__main__":
+	print("This is a module with classes for playing cards.")
+	input("\n\nPress the enter key to exit.")
+```
+
+---
+
+## Blackjack
+
+```
+class BJ_Card(cards.Card):
+	""" A Blackjack Card. """
+	ACE_VALUE = 1
+	
+	@property
+	def value(self):
+		if self.is_face_up:
+			v = BJ_Card.RANKS.index(self.rank) + 1
+			if v > 10:
+				v = 10
+		else:
+			v = None
+	return v
+```
+
+
+---
+
+## Blackjack
+
+```
+class BJ_Deck(cards.Deck):
+	""" A Blackjack Deck. """
+	def populate(self):
+		for suit in BJ_Card.SUITS:
+			for rank in BJ_Card.RANKS:
+				self.cards.append(BJ_Card(rank, suit))
+```
+
+
+---
+
+## Blackjack
+
+```
+class BJ_Hand(cards.Hand):
+	""" A Blackjack Hand. """
+	def __init__(self, name):
+		super(BJ_Hand, self).__init__()
+		self.name = name
+	
+	def __str__(self):
+		rep = self.name + ":\t" + super(BJ_Hand, self).__str__()
+		if self.total:
+			rep += "(" + str(self.total) + ")"
+		return rep
+		
+	@property
+	def total(self):
+		# if a card in the hand has value of None, then total is None
+		for card in self.cards:
+			if not card.value:
+				return None
+			
+			# add up card values, treat each Ace as 1
+			t = 0
+			for card in self.cards:
+				t += card.value
+			
+			# determine if hand contains an Ace
+			contains_ace = False
+			for card in self.cards:
+				if card.value == BJ_Card.ACE_VALUE:
+					contains_ace = True
+			
+			# if hand contains Ace and total is low enough, treat Ace as 11		
+			if contains_ace and t <= 11:
+				# add only 10 since we've already added 1 for the Ace
+				t += 10
+
+			return t
+
+	def is_busted(self):
+		return self.total > 21
+```
+
+
+---
+
+## Blackjack
+
+```
+class BJ_Player(BJ_Hand):
+	""" A Blackjack Player. """
+	def is_hitting(self):
+		response = games.ask_yes_no("\n" + self.name + ", do you want a hit? (Y/N): ")
+		return response == "y"
+	
+	def bust(self):
+		print(self.name, "busts.")
+		self.lose()
+	
+	def lose(self):
+		print(self.name, "loses.")
+	
+	def win(self):
+		print(self.name, "wins.")
+
+	def push(self):
+		print(self.name, "pushes.")
+```
+
+---
+
+## Blackjack
+
+```
+class BJ_Dealer(BJ_Hand):
+	""" A Blackjack Dealer. """
+	def is_hitting(self):
+		return self.total < 17
+	
+	def bust(self):
+		print(self.name, "busts.")
+	
+	def flip_first_card(self):
+		first_card = self.cards[0]
+		first_card.flip()
+```
+
+
+---
+
+## Blackjack
+
+```
+class BJ_Game(object):
+	""" A Blackjack Game. """
+	def __init__(self, names):
+		self.players = []
+		for name in names:
+			player = BJ_Player(name)
+			self.players.append(player)
+			self.dealer = BJ_Dealer("Dealer")
+			self.deck = BJ_Deck()
+			self.deck.populate()
+			self.deck.shuffle()
+
+	@property
+	def still_playing(self):
+		sp = []
+		for player in self.players:
+			if not player.is_busted():
+				sp.append(player)
+		return sp
+	
+	def __additional_cards(self, player):
+		while not player.is_busted() and player.is_hitting():
+			self.deck.deal([player])
+			print(player)
+			if player.is_busted():
+				player.bust()
+				
+	def play(self):
+		# deal initial 2 cards to everyone
+		self.deck.deal(self.players + [self.dealer], per_hand = 2)
+		self.dealer.flip_first_card() # hide dealer's first card
+		for player in self.players:
+			print(player)
+		print(self.dealer)
+		
+		# deal additional cards to players
+		for player in self.players:
+			self.__additional_cards(player)
+		
+		self.dealer.flip_first_card() # reveal dealer's first
+		
+		if not self.still_playing:
+			# since all players have busted, just show the dealer's hand
+			print(self.dealer)
+		else:
+			# deal additional cards to dealer
+			print(self.dealer)
+			self.__additional_cards(self.dealer)
+			
+			if self.dealer.is_busted():
+				# everyone still playing wins
+				for player in self.still_playing:
+			else:
+				# compare each player still playing to dealer
+				for player in self.still_playing:
+					if player.total > self.dealer.total:
+						player.win()
+					elif player.total < self.dealer.total:
+						player.lose()
+					else:
+						player.push()
+			
+			# remove everyone's cards
+			for player in self.players:
+				player.clear()
+			self.dealer.clear()
+```
+
+---
+
+## Main
+
+```
+def main():
+	print("\t\tWelcome to Blackjack!\n")
+	names = []
+	number = games.ask_number("How many players? (1 - 7): ", low = 1, high = 8)
+	
+	for i in range(number):
+		name = input("Enter player name: ")
+		names.append(name)
+	
+	print()
+	
+	game = BJ_Game(names)
+	again = None
+	while again != "n":
+		game.play()
+	again = games.ask_yes_no("\nDo you want to play again?: ")
+
+main()
+input("\n\nPress the enter key to exit.")
+```
+</textarea>
+<script>
+  // Create slideshow with scroll navigation disabled
+  var slideshow = remark.create({
+    navigation: {
+      scroll: false  // Disable scroll to change slides
+    }
+  });
+
+  // Add copy buttons to code blocks after slides are created
+  slideshow.on('afterShowSlide', function (slide) {
+    addCopyButtons();
+  });
+
+  function addCopyButtons() {
+    // Target the pre elements that contain code
+    const codeBlocks = document.querySelectorAll('.remark-slide-content pre');
+
+    codeBlocks.forEach(function(pre) {
+      // Check if button already exists
+      if (pre.querySelector('.copy-button')) {
+        return;
+      }
+
+      const button = document.createElement('button');
+      button.className = 'copy-button';
+      button.innerHTML = '📋'; // Copy icon
+      button.title = 'Copy code';
+
+      button.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const code = pre.querySelector('code');
+        const text = code ? code.innerText : pre.innerText;
+
+        navigator.clipboard.writeText(text).then(function() {
+          button.innerHTML = '✓';
+          button.classList.add('copied');
+
+          setTimeout(function() {
+            button.innerHTML = '📋';
+            button.classList.remove('copied');
+          }, 2000);
+        }).catch(function(err) {
+          console.error('Failed to copy:', err);
+          button.innerHTML = '✗';
+          setTimeout(function() {
+            button.innerHTML = '📋';
+          }, 2000);
+        });
+      });
+
+      pre.style.position = 'relative';
+      pre.appendChild(button);
+    });
+  }
+
+  // Initial call with longer delay to ensure slides are loaded
+  setTimeout(addCopyButtons, 500);
+</script>
+</body>
+</html>
