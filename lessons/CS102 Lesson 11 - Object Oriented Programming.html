@@ -744,10 +744,10 @@ class BJ_Game(object):
 					else:
 						player.push()
 			
-			# remove everyone's cards
-			for player in self.players:
-				player.clear()
-			self.dealer.clear()
+		# remove everyone's cards
+		for player in self.players:
+			player.clear()
+		self.dealer.clear()
 ```
 
 ---
@@ -770,7 +770,7 @@ def main():
 	again = None
 	while again != "n":
 		game.play()
-	again = games.ask_yes_no("\nDo you want to play again?: ")
+		again = games.ask_yes_no("\nDo you want to play again?: ")
 
 main()
 input("\n\nPress the enter key to exit.")
