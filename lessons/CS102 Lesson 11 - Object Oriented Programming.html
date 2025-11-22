@@ -415,7 +415,6 @@ print(card3)
 
 ## Mini Demo pt2
 
-
 ```
 # Games
 # Demonstrates module creation
@@ -428,19 +427,19 @@ class Player(object):
 	def __str__(self):
 		return self.name + ":\t" + str(self.score)
 
-	def ask_yes_no(question):
-		"""Ask a yes or no question."""
-		response = None
-		while response not in ("y", "n"):
-			response = input(question).lower()
-		return response
-	
-	def ask_number(question, low, high):
-		"""Ask for a number within a range."""
-		response = None
-		while response not in range(low, high):
-			response = int(input(question))
-		return response
+def ask_yes_no(question):
+	"""Ask a yes or no question."""
+	response = None
+	while response not in ("y", "n"):
+		response = input(question).lower()
+	return response
+
+def ask_number(question, low, high):
+	"""Ask for a number within a range."""
+	response = None
+	while response not in range(low, high):
+		response = int(input(question))
+	return response
 	
 if __name__ == "__main__":
 	print("You ran this module directly (and did not 'import' it).")
@@ -456,37 +455,19 @@ print("Welcome to the world's simplest game!\n")
 again = None
 while again != "n":
 	players = []
-num = games.ask_number(question = "How many players? (2 - 5): ", low = 2, high = 5)
-```
+	num = games.ask_number(question = "How many players? (2 - 5): ", low = 2, high = 5)
 
----
+	for i in range(num):
+		name = input("Player name: ")
+		score = random.randrange(100) + 1
+		player = games.Player(name, score)
+		players.append(player)
 
-## Mini Demo pt2
-
-```
-for i in range(num):
-	name = input("Player name: ")
-	score = random.randrange(100) + 1
-	player = games.Player(name, score)
-	players.append(player)
-```
-
----
-
-## Mini Demo pt2
-
-```
-print("\nHere are the game results:")
-for player in players:
-print(player)
-```
-
----
-
-## Mini Demo pt2
-
-```
-again = games.ask_yes_no("\nDo you want to play again? (y/n): ")
+	print("\nHere are the game results:")
+	for player in players:
+		print(player)
+	
+	again = games.ask_yes_no("\nDo you want to play again? (y/n): ")
 ```
 
 ---
@@ -586,7 +567,7 @@ class BJ_Card(cards.Card):
 				v = 10
 		else:
 			v = None
-	return v
+		return v
 ```
 
 
@@ -752,6 +733,7 @@ class BJ_Game(object):
 			if self.dealer.is_busted():
 				# everyone still playing wins
 				for player in self.still_playing:
+					player.win()
 			else:
 				# compare each player still playing to dealer
 				for player in self.still_playing:
